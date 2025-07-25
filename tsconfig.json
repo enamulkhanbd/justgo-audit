@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    // Add or update the "lib" array
+    "lib": ["es6", "dom", "ES2017"],
+    "types": ["@figma/plugin-typings"]
+    // ... other options
+  }
+}

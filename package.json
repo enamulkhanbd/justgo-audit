@@ -1,0 +1,20 @@
+{
+  "name": "justgo-color-audit",
+  "version": "1.0.0",
+  "description": "Figma plugin to find layers using specific design variables",
+  "scripts": {
+    "build-plugin": "tsc code.ts --target es2017 --lib es2017,dom --outDir . --skipLibCheck",
+    "watch-plugin": "tsc code.ts --target es2017 --lib es2017,dom --outDir . --skipLibCheck --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.116.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "figma",
+    "plugin",
+    "variables",
+    "design-tokens"
+  ],
+  "author": "Your Name"
+}

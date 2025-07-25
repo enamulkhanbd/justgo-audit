@@ -1,0 +1,13 @@
+{
+  "name": "JustGo Color Audit",
+  "id": "justgo-color-audit",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  },
+  "permissions": [],
+  "editorType": ["figma"]
+}
