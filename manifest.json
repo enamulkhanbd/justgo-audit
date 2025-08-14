@@ -1,13 +1,17 @@
 {
-  "name": "JustGo Color Audit",
-  "id": "justgo-color-audit",
+  "name": "JustGo Audit",
+  "id": "justgo-audit-plugin",
   "api": "1.0.0",
   "main": "code.js",
   "ui": "ui.html",
-  "documentAccess": "dynamic-page",
-  "networkAccess": {
-    "allowedDomains": ["none"]
-  },
-  "permissions": [],
-  "editorType": ["figma"]
+  "editorType": ["figma"],
+  "parameterOnly": false,
+  "menu": [
+    {
+      "name": "Open JustGo Audit",
+      "command": "open-audit"
+    }
+  ],
+  "capabilities": [],
+  "documentAccess": "dynamic-page"
 }

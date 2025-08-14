@@ -1,11 +1,28 @@
-// Variable & Style Finder Plugin - Fixed Search Scope Logic
+// JustGo Audit Plugin - WITH STRICT LAYER NAME SEARCH
 figma.showUI(__html__, {
     width: 420,
-    height: 700,
+    height: 750,
     themeColors: true
 });
 
-console.log('🚀 Variable & Style Finder Plugin Loaded - SEARCH SCOPE FIXED');
+// STRICT: Only these exact layer names are allowed
+var ALLOWED_LAYER_NAMES = [
+    'heading-text',
+    'title-text',
+    'subtitle-text',
+    'body-text',
+    'highlighted-text',
+    'info-text',
+    'caption-text',
+    'overline-text'
+];
+
+// STRICT: Exclude these node types
+var EXCLUDED_NODE_TYPES = [
+    'COMPONENT',
+    'INSTANCE',
+    'COMPONENT_SET'
+];
 
 // Simple function to get all nodes recursively
 function getAllNodes(node) {
@@ -31,6 +48,52 @@ function buildNodePath(node) {
     return path.join(' → ');
 }
 
+// STRICT: Function to search for layers by exact name matching only
+function searchLayersByName(searchTerm, scopeNodes) {
+    var results = [];
+    var searchLower = searchTerm.toLowerCase().trim();
+    var stats = { checkedNodes: 0, matchingNodes: 0, excludedNodes: 0 };
+
+    // STRICT: Check if search term is in allowed list
+    if (ALLOWED_LAYER_NAMES.indexOf(searchLower) === -1) {
+        return {
+            results: [],
+            searchStatistics: stats,
+            strictError: 'Layer name "' + searchTerm + '" is not in the allowed list. Use: ' + ALLOWED_LAYER_NAMES.join(', ')
+        };
+    }
+
+    for (var i = 0; i < scopeNodes.length; i++) {
+        var node = scopeNodes[i];
+        stats.checkedNodes++;
+
+        // STRICT: Exclude component and instance types
+        if (EXCLUDED_NODE_TYPES.indexOf(node.type) !== -1) {
+            stats.excludedNodes++;
+            continue;
+        }
+
+        var nodeName = node.name.toLowerCase().trim();
+
+        // STRICT: Only exact matches allowed
+        if (nodeName === searchLower) {
+            stats.matchingNodes++;
+            results.push({
+                id: node.id,
+                name: node.name,
+                type: node.type,
+                path: buildNodePath(node),
+                matchType: 'LAYER_NAME'
+            });
+        }
+    }
+
+    return {
+        results: results,
+        searchStatistics: stats
+    };
+}
+
 // ASYNC function to safely get variable by ID
 async function safeGetVariable(variableId) {
     try {
@@ -41,7 +104,6 @@ async function safeGetVariable(variableId) {
             var variable = figma.variables.getVariableById(variableId);
             return variable;
         } catch (syncError) {
-            console.warn('Failed to get variable with both async and sync methods:', error.message, syncError.message);
             return null;
         }
     }
@@ -57,9 +119,28 @@ async function safeGetVariableCollection(collectionId) {
             var collection = figma.variables.getVariableCollectionById(collectionId);
             return collection;
         } catch (syncError) {
-            console.warn('Failed to get collection with both async and sync methods:', error.message, syncError.message);
             return null;
         }
+    }
+}
+
+// ENHANCED function to safely get style by ID
+function safeGetStyle(styleId, styleProperty, nodeName) {
+    try {
+        if (!styleId || styleId === '' || styleId === null || styleId === undefined || styleId === figma.mixed) {
+            return null;
+        }
+
+        var style = figma.getStyleById(styleId);
+
+        if (!style) {
+            return null;
+        }
+
+        return style;
+
+    } catch (error) {
+        return null;
     }
 }
 
@@ -72,26 +153,18 @@ function styleMatches(styleName, searchTerm) {
     var searchParts = searchLower.split('/');
     var searchBase = searchParts[searchParts.length - 1];
 
-    console.log('        🔍 Style matching comparison:');
-    console.log('          Style name:', styleNameLower);
-    console.log('          Search term:', searchLower);
-    console.log('          Search base:', searchBase);
-
     // Strategy 1: Exact match
     if (styleNameLower === searchLower) {
-        console.log('          ✅ EXACT MATCH!');
         return true;
     }
 
     // Strategy 2: Contains match
     if (styleNameLower.includes(searchLower)) {
-        console.log('          ✅ CONTAINS MATCH!');
         return true;
     }
 
     // Strategy 3: Search contains style name
     if (searchLower.includes(styleNameLower)) {
-        console.log('          ✅ REVERSE CONTAINS MATCH!');
         return true;
     }
 
@@ -99,7 +172,6 @@ function styleMatches(styleName, searchTerm) {
     var styleNameParts = styleNameLower.split('/');
     var styleBase = styleNameParts[styleNameParts.length - 1];
     if (styleBase === searchBase || styleBase.includes(searchBase) || searchBase.includes(styleBase)) {
-        console.log('          ✅ BASE NAME MATCH!', styleBase, 'vs', searchBase);
         return true;
     }
 
@@ -107,12 +179,11 @@ function styleMatches(styleName, searchTerm) {
     for (var i = 0; i < searchParts.length; i++) {
         var searchPart = searchParts[i];
         if (searchPart.length > 2 && styleNameLower.includes(searchPart)) {
-            console.log('          ✅ PARTIAL COMPONENT MATCH!', searchPart);
             return true;
         }
     }
 
-    // Strategy 6: Word boundary matching (for cases like "warning" matching "warning/100")
+    // Strategy 6: Word boundary matching
     var searchWords = searchLower.replace(/[\/\-_]/g, ' ').split(' ').filter(function (w) { return w.length > 1; });
     var styleWords = styleNameLower.replace(/[\/\-_]/g, ' ').split(' ').filter(function (w) { return w.length > 1; });
 
@@ -121,14 +192,123 @@ function styleMatches(styleName, searchTerm) {
             if (searchWords[i] === styleWords[j] ||
                 searchWords[i].includes(styleWords[j]) ||
                 styleWords[j].includes(searchWords[i])) {
-                console.log('          ✅ WORD BOUNDARY MATCH!', searchWords[i], 'vs', styleWords[j]);
                 return true;
             }
         }
     }
 
-    console.log('          ❌ No match found');
     return false;
+}
+
+// Style detection with debugging
+function checkNodeStyles(node, searchTerm) {
+    var foundStyles = [];
+    var matchesSearch = false;
+
+    // === PAINT STYLES (Fill) ===
+    if ('fillStyleId' in node) {
+        var fillStyleId = node.fillStyleId;
+        var fillStyle = safeGetStyle(fillStyleId, 'fillStyleId', node.name);
+
+        if (fillStyle) {
+            foundStyles.push({
+                type: 'STYLE',
+                name: fillStyle.name,
+                styleType: 'PAINT',
+                property: 'fill',
+                isRemote: fillStyle.remote || false
+            });
+
+            if (styleMatches(fillStyle.name, searchTerm)) {
+                matchesSearch = true;
+            }
+        }
+    }
+
+    // === PAINT STYLES (Stroke) ===
+    if ('strokeStyleId' in node) {
+        var strokeStyleId = node.strokeStyleId;
+        var strokeStyle = safeGetStyle(strokeStyleId, 'strokeStyleId', node.name);
+
+        if (strokeStyle) {
+            foundStyles.push({
+                type: 'STYLE',
+                name: strokeStyle.name,
+                styleType: 'PAINT',
+                property: 'stroke',
+                isRemote: strokeStyle.remote || false
+            });
+
+            if (styleMatches(strokeStyle.name, searchTerm)) {
+                matchesSearch = true;
+            }
+        }
+    }
+
+    // === TEXT STYLES ===
+    if (node.type === 'TEXT' && 'textStyleId' in node) {
+        var textStyleId = node.textStyleId;
+        var textStyle = safeGetStyle(textStyleId, 'textStyleId', node.name);
+
+        if (textStyle) {
+            foundStyles.push({
+                type: 'STYLE',
+                name: textStyle.name,
+                styleType: 'TEXT',
+                property: 'text',
+                isRemote: textStyle.remote || false
+            });
+
+            if (styleMatches(textStyle.name, searchTerm)) {
+                matchesSearch = true;
+            }
+        }
+    }
+
+    // === EFFECT STYLES ===
+    if ('effectStyleId' in node) {
+        var effectStyleId = node.effectStyleId;
+        var effectStyle = safeGetStyle(effectStyleId, 'effectStyleId', node.name);
+
+        if (effectStyle) {
+            foundStyles.push({
+                type: 'STYLE',
+                name: effectStyle.name,
+                styleType: 'EFFECT',
+                property: 'effect',
+                isRemote: effectStyle.remote || false
+            });
+
+            if (styleMatches(effectStyle.name, searchTerm)) {
+                matchesSearch = true;
+            }
+        }
+    }
+
+    // === GRID STYLES ===
+    if ('gridStyleId' in node) {
+        var gridStyleId = node.gridStyleId;
+        var gridStyle = safeGetStyle(gridStyleId, 'gridStyleId', node.name);
+
+        if (gridStyle) {
+            foundStyles.push({
+                type: 'STYLE',
+                name: gridStyle.name,
+                styleType: 'GRID',
+                property: 'grid',
+                isRemote: gridStyle.remote || false
+            });
+
+            if (styleMatches(gridStyle.name, searchTerm)) {
+                matchesSearch = true;
+            }
+        }
+    }
+
+    return {
+        foundStyles: foundStyles,
+        matchesSearch: matchesSearch
+    };
 }
 
 // Enhanced ASYNC function to check if a node uses specific variables or styles
@@ -141,162 +321,43 @@ async function nodeHasVariableOrStyle(node, searchTerm) {
         var searchParts = searchLower.split('/');
         var searchBase = searchParts[searchParts.length - 1];
 
-        // === ENHANCED STYLE DETECTION WITH BETTER MATCHING ===
-        console.log('    🎨 Checking styles for:', node.name);
+        // === ENHANCED STYLE DETECTION ===
+        var styleResult = checkNodeStyles(node, searchTerm);
 
-        // Check fill style with enhanced matching
-        if ('fillStyleId' in node && node.fillStyleId && node.fillStyleId !== figma.mixed) {
-            try {
-                var fillStyle = figma.getStyleById(node.fillStyleId);
-                if (fillStyle) {
-                    console.log('      📝 Found fill style:', fillStyle.name);
-                    foundItems.push({
-                        type: 'STYLE',
-                        name: fillStyle.name,
-                        styleType: 'PAINT',
-                        isRemote: fillStyle.remote || false
-                    });
-
-                    // Use enhanced style matching
-                    if (styleMatches(fillStyle.name, searchTerm)) {
-                        console.log('      ✅ MATCH: Fill style matches search!', fillStyle.name, 'vs', searchTerm);
-                        found = true;
-                    }
-                }
-            } catch (e) {
-                console.warn('      ❌ Error getting fill style:', e);
-            }
-        }
-
-        // Check stroke style with enhanced matching
-        if ('strokeStyleId' in node && node.strokeStyleId && node.strokeStyleId !== figma.mixed) {
-            try {
-                var strokeStyle = figma.getStyleById(node.strokeStyleId);
-                if (strokeStyle) {
-                    console.log('      📝 Found stroke style:', strokeStyle.name);
-                    foundItems.push({
-                        type: 'STYLE',
-                        name: strokeStyle.name,
-                        styleType: 'PAINT',
-                        isRemote: strokeStyle.remote || false
-                    });
-
-                    if (styleMatches(strokeStyle.name, searchTerm)) {
-                        console.log('      ✅ MATCH: Stroke style matches search!', strokeStyle.name, 'vs', searchTerm);
-                        found = true;
-                    }
-                }
-            } catch (e) {
-                console.warn('      ❌ Error getting stroke style:', e);
-            }
-        }
-
-        // Check text style with enhanced matching
-        if (node.type === 'TEXT' && 'textStyleId' in node && node.textStyleId && node.textStyleId !== figma.mixed) {
-            try {
-                var textStyle = figma.getStyleById(node.textStyleId);
-                if (textStyle) {
-                    console.log('      📝 Found text style:', textStyle.name);
-                    foundItems.push({
-                        type: 'STYLE',
-                        name: textStyle.name,
-                        styleType: 'TEXT',
-                        isRemote: textStyle.remote || false
-                    });
-
-                    if (styleMatches(textStyle.name, searchTerm)) {
-                        console.log('      ✅ MATCH: Text style matches search!', textStyle.name, 'vs', searchTerm);
-                        found = true;
-                    }
-                }
-            } catch (e) {
-                console.warn('      ❌ Error getting text style:', e);
-            }
-        }
-
-        // Check effect style with enhanced matching
-        if ('effectStyleId' in node && node.effectStyleId && node.effectStyleId !== figma.mixed) {
-            try {
-                var effectStyle = figma.getStyleById(node.effectStyleId);
-                if (effectStyle) {
-                    console.log('      📝 Found effect style:', effectStyle.name);
-                    foundItems.push({
-                        type: 'STYLE',
-                        name: effectStyle.name,
-                        styleType: 'EFFECT',
-                        isRemote: effectStyle.remote || false
-                    });
-
-                    if (styleMatches(effectStyle.name, searchTerm)) {
-                        console.log('      ✅ MATCH: Effect style matches search!', effectStyle.name, 'vs', searchTerm);
-                        found = true;
-                    }
-                }
-            } catch (e) {
-                console.warn('      ❌ Error getting effect style:', e);
-            }
-        }
-
-        // Check grid style with enhanced matching
-        if ('gridStyleId' in node && node.gridStyleId && node.gridStyleId !== figma.mixed) {
-            try {
-                var gridStyle = figma.getStyleById(node.gridStyleId);
-                if (gridStyle) {
-                    console.log('      📝 Found grid style:', gridStyle.name);
-                    foundItems.push({
-                        type: 'STYLE',
-                        name: gridStyle.name,
-                        styleType: 'GRID',
-                        isRemote: gridStyle.remote || false
-                    });
-
-                    if (styleMatches(gridStyle.name, searchTerm)) {
-                        console.log('      ✅ MATCH: Grid style matches search!', gridStyle.name, 'vs', searchTerm);
-                        found = true;
-                    }
-                }
-            } catch (e) {
-                console.warn('      ❌ Error getting grid style:', e);
-            }
+        // Add style results
+        foundItems = foundItems.concat(styleResult.foundStyles);
+        if (styleResult.matchesSearch) {
+            found = true;
         }
 
         // === ENHANCED ASYNC VARIABLE DETECTION ===
-        console.log('    🔗 Checking variables for:', node.name);
 
         // Check variables in fills
         if ('fills' in node && Array.isArray(node.fills)) {
-            console.log('      📝 Node has', node.fills.length, 'fills');
             for (var i = 0; i < node.fills.length; i++) {
                 var fill = node.fills[i];
-                console.log('        Fill', i, ':', fill.type, fill.visible !== false ? 'visible' : 'hidden');
 
                 if (fill && fill.boundVariables) {
-                    console.log('        Fill has bound variables:', Object.keys(fill.boundVariables));
                     for (var prop in fill.boundVariables) {
                         var binding = fill.boundVariables[prop];
                         if (binding && binding.id) {
                             try {
-                                console.log('        🔍 Getting variable with ID:', binding.id);
                                 var variable = await safeGetVariable(binding.id);
                                 if (variable) {
                                     var varName = variable.name;
                                     var fullName = varName;
                                     var isRemote = false;
 
-                                    // Try to get collection info
                                     try {
-                                        console.log('        🔍 Getting collection for variable:', varName);
                                         var collection = await safeGetVariableCollection(variable.variableCollectionId);
                                         if (collection) {
                                             fullName = collection.name + '/' + variable.name;
                                             isRemote = collection.remote || false;
-                                            console.log('        📁 Collection found:', collection.name, 'Remote:', isRemote);
                                         }
                                     } catch (collErr) {
-                                        console.warn('          Could not get collection for variable:', varName, collErr.message);
+                                        // Ignore
                                     }
 
-                                    console.log('        🔗 Found variable in fill:', fullName, '(', variable.resolvedType, ')');
                                     foundItems.push({
                                         type: 'VARIABLE',
                                         name: fullName,
@@ -304,15 +365,10 @@ async function nodeHasVariableOrStyle(node, searchTerm) {
                                         isRemote: isRemote
                                     });
 
-                                    // ENHANCED FLEXIBLE MATCHING FOR VARIABLES
                                     var fullNameLower = fullName.toLowerCase();
                                     var varNameLower = varName.toLowerCase();
                                     var fullNameParts = fullNameLower.split('/');
                                     var varBaseName = fullNameParts[fullNameParts.length - 1];
-
-                                    console.log('        🔍 Comparing:');
-                                    console.log('          Search:', searchLower, '| Base:', searchBase);
-                                    console.log('          Variable:', fullNameLower, '| VarBase:', varBaseName);
 
                                     if (fullNameLower.includes(searchLower) ||
                                         varNameLower.includes(searchLower) ||
@@ -321,28 +377,20 @@ async function nodeHasVariableOrStyle(node, searchTerm) {
                                         searchLower.includes(varBaseName) ||
                                         (searchBase.length > 3 && varBaseName.includes(searchBase.substring(0, searchBase.length - 1))) ||
                                         (varBaseName.length > 3 && searchBase.includes(varBaseName.substring(0, varBaseName.length - 1)))) {
-                                        console.log('        ✅ MATCH: Fill variable matches search!', fullName, 'vs', searchTerm);
                                         found = true;
-                                    } else {
-                                        console.log('        ❌ No match for variable:', fullName);
                                     }
-                                } else {
-                                    console.log('        ❌ Variable was null for ID:', binding.id);
                                 }
                             } catch (e) {
-                                console.warn('        ❌ Error getting fill variable:', e.message);
+                                // Ignore
                             }
                         }
                     }
-                } else {
-                    console.log('        Fill has no bound variables');
                 }
             }
         }
 
-        // Check variables in strokes
+        // Check variables in strokes (similar pattern)
         if ('strokes' in node && Array.isArray(node.strokes)) {
-            console.log('      📝 Node has', node.strokes.length, 'strokes');
             for (var i = 0; i < node.strokes.length; i++) {
                 var stroke = node.strokes[i];
                 if (stroke && stroke.boundVariables) {
@@ -366,7 +414,6 @@ async function nodeHasVariableOrStyle(node, searchTerm) {
                                         // Ignore
                                     }
 
-                                    console.log('        🔗 Found variable in stroke:', fullName);
                                     foundItems.push({
                                         type: 'VARIABLE',
                                         name: fullName,
@@ -380,12 +427,11 @@ async function nodeHasVariableOrStyle(node, searchTerm) {
                                         varNameLower.includes(searchLower) ||
                                         fullNameLower.includes(searchBase) ||
                                         searchLower.includes(fullNameLower.split('/').pop() || '')) {
-                                        console.log('        ✅ MATCH: Stroke variable matches search!', fullName, 'vs', searchTerm);
                                         found = true;
                                     }
                                 }
                             } catch (e) {
-                                console.warn('        ❌ Error getting stroke variable:', e.message);
+                                // Ignore
                             }
                         }
                     }
@@ -395,10 +441,6 @@ async function nodeHasVariableOrStyle(node, searchTerm) {
 
         // Check other bound variables (width, height, corner radius, etc.)
         var boundVariableProps = ['width', 'height', 'cornerRadius', 'paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom', 'rotation', 'opacity'];
-
-        if (node.boundVariables) {
-            console.log('      📝 Node has bound variables for:', Object.keys(node.boundVariables));
-        }
 
         for (var p = 0; p < boundVariableProps.length; p++) {
             var propName = boundVariableProps[p];
@@ -422,7 +464,6 @@ async function nodeHasVariableOrStyle(node, searchTerm) {
                                 // Ignore
                             }
 
-                            console.log('        🔗 Found variable in', propName + ':', fullName);
                             foundItems.push({
                                 type: 'VARIABLE',
                                 name: fullName,
@@ -437,161 +478,25 @@ async function nodeHasVariableOrStyle(node, searchTerm) {
                                 varNameLower.includes(searchLower) ||
                                 fullNameLower.includes(searchBase) ||
                                 searchLower.includes(fullNameLower.split('/').pop() || '')) {
-                                console.log('        ✅ MATCH: ' + propName + ' variable matches search!', fullName, 'vs', searchTerm);
                                 found = true;
                             }
                         }
                     } catch (e) {
-                        console.warn('        ❌ Error getting', propName, 'variable:', e.message);
+                        // Ignore
                     }
                 }
             }
         }
 
-        // Summary for this node
-        if (foundItems.length > 0) {
-            console.log('    📋 Total items found on node:', foundItems.length, 'Match:', found);
-            if (found) {
-                console.log('    🎯 THIS NODE WILL BE INCLUDED IN RESULTS');
-            } else {
-                console.log('    ⚠️ Node has variables/styles but none match search');
-            }
-        } else {
-            console.log('    📋 No variables or styles found on this node');
-        }
-
     } catch (error) {
-        console.error('  ❌ Error checking node:', node.name, error.message);
+        // Ignore
     }
 
     return { found: found, items: foundItems };
 }
 
-// BULLETPROOF ZOOM FUNCTION - Keep this working perfectly!
-function zoomToNode(nodeId, nodeName) {
-    console.log('🎯 === ZOOM FUNCTION START ===');
-    console.log('Target Node ID:', nodeId);
-    console.log('Target Node Name:', nodeName);
-
-    try {
-        if (!nodeId || typeof nodeId !== 'string') {
-            console.error('❌ Invalid node ID:', nodeId);
-            return {
-                success: false,
-                error: 'Invalid node ID provided',
-                details: 'Node ID must be a non-empty string'
-            };
-        }
-
-        console.log('🔍 Searching for node...');
-        var targetNode = null;
-
-        try {
-            targetNode = figma.getNodeById(nodeId);
-            console.log('✅ Found node directly:', targetNode ? targetNode.name : 'null');
-        } catch (findError) {
-            console.warn('⚠️ Direct node lookup failed:', findError.message);
-
-            console.log('🔍 Trying fallback search across all pages...');
-            var allPages = figma.root.children;
-
-            for (var p = 0; p < allPages.length; p++) {
-                var page = allPages[p];
-                console.log('   Searching page:', page.name);
-
-                try {
-                    var pageNodes = getAllNodes(page);
-                    for (var n = 0; n < pageNodes.length; n++) {
-                        if (pageNodes[n].id === nodeId) {
-                            targetNode = pageNodes[n];
-                            console.log('✅ Found node in fallback search:', targetNode.name);
-                            break;
-                        }
-                    }
-                } catch (pageError) {
-                    console.warn('   Error searching page:', page.name, pageError.message);
-                }
-
-                if (targetNode) break;
-            }
-        }
-
-        if (!targetNode) {
-            console.error('❌ Node not found after exhaustive search');
-            return {
-                success: false,
-                error: 'Node not found',
-                details: 'Node with ID "' + nodeId + '" does not exist or has been deleted'
-            };
-        }
-
-        console.log('✅ Target node confirmed:', targetNode.name, 'Type:', targetNode.type);
-
-        var nodePage = null;
-        var current = targetNode;
-        while (current && current.type !== 'PAGE') {
-            current = current.parent;
-        }
-        nodePage = current;
-
-        if (nodePage) {
-            console.log('📄 Node is on page:', nodePage.name);
-            if (figma.currentPage !== nodePage) {
-                console.log('🔄 Switching to correct page...');
-                figma.currentPage = nodePage;
-                console.log('✅ Switched to page:', nodePage.name);
-            } else {
-                console.log('✅ Already on correct page');
-            }
-        } else {
-            console.warn('⚠️ Could not determine node page');
-        }
-
-        console.log('🎯 Selecting node...');
-        try {
-            figma.currentPage.selection = [targetNode];
-            console.log('✅ Node selected successfully');
-        } catch (selectionError) {
-            console.error('❌ Failed to select node:', selectionError.message);
-        }
-
-        console.log('🔍 Zooming to node...');
-        try {
-            figma.viewport.scrollAndZoomIntoView([targetNode]);
-            console.log('✅ Zoom successful!');
-
-            return {
-                success: true,
-                nodeId: nodeId,
-                nodeName: targetNode.name,
-                nodePath: buildNodePath(targetNode)
-            };
-
-        } catch (zoomError) {
-            console.error('❌ Zoom failed:', zoomError.message);
-            return {
-                success: false,
-                error: 'Zoom operation failed',
-                details: zoomError.message
-            };
-        }
-
-    } catch (generalError) {
-        console.error('❌ General error in zoom function:', generalError);
-        return {
-            success: false,
-            error: 'Unexpected error during zoom',
-            details: generalError.message
-        };
-    } finally {
-        console.log('🎯 === ZOOM FUNCTION END ===');
-    }
-}
-
 // ENHANCED: Smart search scope selection with automatic fallback
 async function performSmartSearch(searchTerm) {
-    console.log('🧠 === SMART SEARCH SCOPE LOGIC ===');
-
     var allFoundItems = [];
     var uniqueVariablesFound = [];
     var uniqueStylesFound = [];
@@ -601,7 +506,6 @@ async function performSmartSearch(searchTerm) {
     var selectionStats = { checkedNodes: 0, nodesWithItems: 0, matchingNodes: 0 };
 
     if (figma.currentPage.selection.length > 0) {
-        console.log('🎯 PHASE 1: Searching in selection first...');
         var selectionNodes = [];
 
         for (var i = 0; i < figma.currentPage.selection.length; i++) {
@@ -610,14 +514,10 @@ async function performSmartSearch(searchTerm) {
             selectionNodes = selectionNodes.concat(allNodes);
         }
 
-        console.log('📊 Selection contains', selectionNodes.length, 'total nodes');
-
         // Check selection nodes
         for (var i = 0; i < selectionNodes.length; i++) {
             var node = selectionNodes[i];
             selectionStats.checkedNodes++;
-
-            console.log('  🔍 Checking selection node', selectionStats.checkedNodes + '/' + selectionNodes.length + ':', node.name);
 
             var check = await nodeHasVariableOrStyle(node, searchTerm);
 
@@ -665,14 +565,8 @@ async function performSmartSearch(searchTerm) {
             }
         }
 
-        console.log('📊 Selection search results:');
-        console.log('  - Nodes checked:', selectionStats.checkedNodes);
-        console.log('  - Nodes with variables/styles:', selectionStats.nodesWithItems);
-        console.log('  - Matching nodes found:', selectionStats.matchingNodes);
-
         // If we found matches in selection, return them
         if (selectionResults.length > 0) {
-            console.log('✅ Found', selectionResults.length, 'results in selection - using selection scope');
             return {
                 results: selectionResults,
                 context: 'Selected layers (' + figma.currentPage.selection.length + ' items)',
@@ -688,26 +582,15 @@ async function performSmartSearch(searchTerm) {
                 totalSearched: selectionNodes.length
             };
         }
-
-        // If selection had some variables/styles but no matches, inform user
-        if (selectionStats.nodesWithItems > 0) {
-            console.log('⚠️ Selection has variables/styles but none match search - expanding to page...');
-        } else {
-            console.log('⚠️ Selection has no variables/styles at all - expanding to page...');
-        }
     }
 
     // Phase 2: Search entire page (fallback or default)
-    console.log('🎯 PHASE 2: Searching entire page...');
-
     var pageNodes = [];
     for (var i = 0; i < figma.currentPage.children.length; i++) {
         var child = figma.currentPage.children[i];
         var allNodes = getAllNodes(child);
         pageNodes = pageNodes.concat(allNodes);
     }
-
-    console.log('📊 Page contains', pageNodes.length, 'total nodes');
 
     var pageResults = [];
     var pageStats = { checkedNodes: 0, nodesWithItems: 0, matchingNodes: 0 };
@@ -720,8 +603,6 @@ async function performSmartSearch(searchTerm) {
     for (var i = 0; i < pageNodes.length; i++) {
         var node = pageNodes[i];
         pageStats.checkedNodes++;
-
-        console.log('  🔍 Checking page node', pageStats.checkedNodes + '/' + pageNodes.length + ':', node.name, '(' + node.type + ')');
 
         var check = await nodeHasVariableOrStyle(node, searchTerm);
 
@@ -769,11 +650,6 @@ async function performSmartSearch(searchTerm) {
         }
     }
 
-    console.log('📊 Page search results:');
-    console.log('  - Nodes checked:', pageStats.checkedNodes);
-    console.log('  - Nodes with variables/styles:', pageStats.nodesWithItems);
-    console.log('  - Matching nodes found:', pageStats.matchingNodes);
-
     var context = figma.currentPage.name;
     if (figma.currentPage.selection.length > 0) {
         context += ' (expanded from selection)';
@@ -800,10 +676,51 @@ async function performSmartSearch(searchTerm) {
     };
 }
 
-// Handle messages from UI - ENHANCED WITH SMART SEARCH
-figma.ui.onmessage = async function (msg) {
-    console.log('📨 Message from UI:', msg.type, msg);
+// STRICT: Perform layer name search with smart scope
+function performLayerNameSearch(searchTerm) {
+    var searchNodes = [];
+    var context = '';
 
+    // Determine search scope
+    if (figma.currentPage.selection.length > 0) {
+        for (var i = 0; i < figma.currentPage.selection.length; i++) {
+            var selected = figma.currentPage.selection[i];
+            var allNodes = getAllNodes(selected);
+            searchNodes = searchNodes.concat(allNodes);
+        }
+        context = 'Selected layers (' + figma.currentPage.selection.length + ' items)';
+    } else {
+        for (var i = 0; i < figma.currentPage.children.length; i++) {
+            var child = figma.currentPage.children[i];
+            var allNodes = getAllNodes(child);
+            searchNodes = searchNodes.concat(allNodes);
+        }
+        context = figma.currentPage.name;
+    }
+
+    var searchResult = searchLayersByName(searchTerm, searchNodes);
+
+    return {
+        results: searchResult.results,
+        context: context,
+        searchStatistics: {
+            checkedNodes: searchResult.searchStatistics.checkedNodes,
+            nodesWithItems: 0, // Not applicable for layer name search
+            matchingNodes: searchResult.searchStatistics.matchingNodes,
+            uniqueVariables: [],
+            uniqueStyles: [],
+            totalUniqueItems: 0,
+            excludedNodes: searchResult.searchStatistics.excludedNodes
+        },
+        foundItems: [],
+        totalSearched: searchNodes.length,
+        searchType: 'LAYER_NAME',
+        strictError: searchResult.strictError
+    };
+}
+
+// Handle messages from UI - ENHANCED WITH STRICT LAYER NAME SEARCH
+figma.ui.onmessage = async function (msg) {
     if (msg.type === 'find-variables-and-styles') {
         var searchTerm = msg.searchTerm;
 
@@ -815,16 +732,8 @@ figma.ui.onmessage = async function (msg) {
             return;
         }
 
-        console.log('🔍 === SMART SEARCH START ===');
-        console.log('Search term:', searchTerm);
-        console.log('Current selection:', figma.currentPage.selection.length, 'items');
-
         try {
             var searchResult = await performSmartSearch(searchTerm);
-
-            console.log('🎉 Smart search complete!');
-            console.log('Final results count:', searchResult.results.length);
-            console.log('Context:', searchResult.context);
 
             // Send results to UI
             figma.ui.postMessage({
@@ -835,11 +744,11 @@ figma.ui.onmessage = async function (msg) {
                 foundItems: searchResult.foundItems,
                 totalSearched: searchResult.totalSearched,
                 searchStatistics: searchResult.searchStatistics,
-                scopeInfo: searchResult.scopeInfo
+                scopeInfo: searchResult.scopeInfo,
+                searchType: 'VARIABLES_STYLES'
             });
 
         } catch (error) {
-            console.error('❌ Error during smart search:', error);
             figma.ui.postMessage({
                 type: 'error',
                 message: 'Search failed: ' + error.message
@@ -847,22 +756,39 @@ figma.ui.onmessage = async function (msg) {
         }
     }
 
-    if (msg.type === 'zoom-to-layer') {
-        var nodeId = msg.nodeId;
-        var nodeName = msg.nodeName || 'Unknown';
+    // STRICT: Handle layer name search
+    if (msg.type === 'find-layer-names') {
+        var searchTerm = msg.searchTerm;
 
-        var result = zoomToNode(nodeId, nodeName);
+        if (!searchTerm || !searchTerm.trim()) {
+            figma.ui.postMessage({
+                type: 'error',
+                message: 'Please enter a layer name to search for'
+            });
+            return;
+        }
 
-        figma.ui.postMessage({
-            type: 'zoom-result',
-            success: result.success,
-            nodeId: nodeId,
-            nodeName: nodeName,
-            error: result.error,
-            details: result.details,
-            nodePath: result.nodePath
-        });
+        try {
+            var searchResult = performLayerNameSearch(searchTerm);
+
+            // Send results to UI
+            figma.ui.postMessage({
+                type: 'search-results',
+                results: searchResult.results,
+                searchTerm: searchTerm,
+                context: searchResult.context,
+                foundItems: searchResult.foundItems,
+                totalSearched: searchResult.totalSearched,
+                searchStatistics: searchResult.searchStatistics,
+                searchType: 'LAYER_NAME',
+                strictError: searchResult.strictError
+            });
+
+        } catch (error) {
+            figma.ui.postMessage({
+                type: 'error',
+                message: 'Layer name search failed: ' + error.message
+            });
+        }
     }
 };
-
-console.log('✅ Variable & Style Finder ready - SMART SEARCH SCOPE FIXED!');
