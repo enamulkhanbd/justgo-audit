@@ -12,28 +12,24 @@
         background: #fff;
         line-height: 1.4;
       }
-
       .header {
-        text-center: true;
+        text-align: center;
         margin-bottom: 20px;
         padding-bottom: 16px;
         border-bottom: 1px solid #eee;
       }
-
       .title {
         font-size: 18px;
         font-weight: 600;
         color: #333;
         margin-bottom: 4px;
       }
-
       .subtitle {
         font-size: 11px;
         color: #666;
         line-height: 1.3;
       }
-
-      .fix-banner {
+      .banner {
         background: #dcfce7;
         border: 1px solid #16a34a;
         border-radius: 6px;
@@ -41,40 +37,42 @@
         margin-bottom: 16px;
         text-align: center;
       }
-
-      .fix-banner-title {
+      .banner-title {
         font-size: 12px;
         font-weight: 600;
         color: #15803d;
         margin-bottom: 4px;
       }
-
-      .fix-banner-text {
+      .banner-text {
         font-size: 10px;
         color: #166534;
       }
-
-      .scope-info {
-        background: #fef3c7;
-        border: 1px solid #f59e0b;
-        border-radius: 6px;
-        padding: 12px;
+      .tabs {
+        display: flex;
         margin-bottom: 16px;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
       }
-
-      .scope-info-title {
-        font-size: 12px;
-        font-weight: 600;
-        color: #92400e;
-        margin-bottom: 4px;
+      .tab {
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 11px;
+        font-weight: 500;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        background: transparent;
       }
-
-      .scope-info-text {
-        font-size: 10px;
-        color: #a16207;
-        line-height: 1.4;
+      .tab.active {
+        background: #2563eb;
+        color: white;
       }
-
+      .tab:hover:not(.active) {
+        background: #e5e7eb;
+      }
       .info-card {
         background: #f8f9fa;
         border: 1px solid #e9ecef;
@@ -82,58 +80,66 @@
         padding: 12px;
         margin-bottom: 16px;
       }
-
       .info-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 8px;
       }
-
       .info-title {
         font-size: 12px;
         font-weight: 600;
       }
-
       .info-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
         font-size: 10px;
       }
-
-      .info-section {
-      }
-
-      .info-section-title {
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-
       .info-item {
         display: flex;
         align-items: center;
         gap: 4px;
         margin-bottom: 2px;
       }
-
+      .quick-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+      .quick-button {
+        padding: 6px 8px;
+        font-size: 10px;
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+      }
+      .quick-button:hover {
+        background: #e5e7eb;
+      }
+      .quick-button.selected {
+        background: #dbeafe;
+        border-color: #2563eb;
+        color: #1d4ed8;
+      }
       .input-section {
         margin-bottom: 16px;
       }
-
       .label {
         display: block;
         font-size: 11px;
         font-weight: 600;
         margin-bottom: 4px;
       }
-
       .hint {
         font-size: 10px;
         color: #666;
         margin-bottom: 6px;
       }
-
       .input {
         width: 100%;
         padding: 8px;
@@ -143,12 +149,10 @@
         box-sizing: border-box;
         margin-bottom: 8px;
       }
-
       .input:focus {
         outline: none;
         border-color: #0066cc;
       }
-
       .button {
         width: 100%;
         padding: 10px;
@@ -164,124 +168,79 @@
         justify-content: center;
         gap: 6px;
       }
-
       .button:hover {
         background: #0056b3;
       }
-
       .button:disabled {
         background: #ccc;
         cursor: not-allowed;
       }
-
       .status {
         padding: 8px;
         border-radius: 4px;
         font-size: 11px;
         margin-bottom: 12px;
       }
-
       .status.success {
         background: #d4edda;
         color: #155724;
         border: 1px solid #c3e6cb;
       }
-
       .status.error {
         background: #f8d7da;
         color: #721c24;
         border: 1px solid #f5c6cb;
       }
-
       .status.info {
         background: #d1ecf1;
         color: #0c5460;
         border: 1px solid #bee5eb;
       }
-
       .status.warning {
         background: #fff3cd;
         color: #856404;
         border: 1px solid #ffeaa7;
       }
-
-      .search-stats {
+      .stats {
         background: #fff3cd;
         border: 1px solid #ffc107;
         border-radius: 6px;
         padding: 12px;
         margin-bottom: 16px;
       }
-
-      .search-stats-header {
+      .stats-header {
         display: flex;
         align-items: center;
         gap: 8px;
         margin-bottom: 8px;
       }
-
-      .search-stats-title {
+      .stats-title {
         font-size: 12px;
         font-weight: 600;
         color: #856404;
       }
-
-      .search-stats-grid {
+      .stats-grid {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         gap: 8px;
         margin-bottom: 8px;
       }
-
-      .search-stat {
+      .stat {
         padding: 6px 8px;
         background: rgba(255, 255, 255, 0.5);
         border-radius: 4px;
         text-align: center;
       }
-
-      .search-stat-number {
+      .stat-number {
         font-size: 14px;
         font-weight: 600;
         color: #856404;
       }
-
-      .search-stat-label {
+      .stat-label {
         font-size: 9px;
         color: #856404;
         margin-top: 2px;
       }
-
-      .search-stats-details {
-        border-top: 1px solid rgba(255, 193, 7, 0.3);
-        padding-top: 8px;
-        margin-top: 8px;
-      }
-
-      .search-stats-section {
-        margin-bottom: 6px;
-      }
-
-      .search-stats-section-title {
-        font-size: 10px;
-        font-weight: 600;
-        color: #856404;
-        margin-bottom: 2px;
-      }
-
-      .search-stats-list {
-        font-size: 9px;
-        color: #856404;
-        margin-left: 8px;
-      }
-
-      .search-stats-empty {
-        font-size: 9px;
-        color: #856404;
-        font-style: italic;
-        margin-left: 8px;
-      }
-
       .found-items {
         background: #d4edda;
         border: 1px solid #c3e6cb;
@@ -289,20 +248,17 @@
         padding: 12px;
         margin-bottom: 16px;
       }
-
-      .found-items-header {
+      .found-header {
         display: flex;
         align-items: center;
         gap: 8px;
         margin-bottom: 8px;
       }
-
-      .found-items-title {
+      .found-title {
         font-size: 12px;
         font-weight: 600;
         color: #155724;
       }
-
       .found-item {
         display: flex;
         align-items: center;
@@ -312,88 +268,78 @@
         background: rgba(255, 255, 255, 0.5);
         border-radius: 4px;
       }
-
-      .found-item-icon {
+      .found-icon {
         font-size: 12px;
       }
-
-      .found-item-details {
+      .found-details {
         flex: 1;
       }
-
-      .found-item-name {
+      .found-name {
         font-size: 11px;
         font-weight: 600;
         color: #155724;
         margin-bottom: 2px;
       }
-
-      .found-item-badges {
+      .found-badges {
         display: flex;
         gap: 4px;
       }
-
       .badge {
         font-size: 9px;
         padding: 2px 4px;
         border-radius: 3px;
         border: 1px solid;
       }
-
       .badge.variable {
         background: #d4edda;
         color: #155724;
         border-color: #c3e6cb;
       }
-
       .badge.style {
         background: #e2e3ff;
         color: #3d4ed8;
         border-color: #c7d2fe;
       }
-
+      .badge.layer {
+        background: #fef3c7;
+        color: #92400e;
+        border-color: #fcd34d;
+      }
       .badge.remote {
         background: #fff3cd;
         color: #856404;
         border-color: #ffeaa7;
       }
-
       .badge.local {
         background: #f8f9fa;
         color: #495057;
         border-color: #dee2e6;
       }
-
-      .results-section {
+      .results {
         margin-bottom: 16px;
       }
-
       .results-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 8px;
       }
-
       .results-title {
         font-size: 12px;
         font-weight: 600;
       }
-
       .results-count {
         font-size: 10px;
         background: #f0f0f0;
         padding: 2px 6px;
         border-radius: 10px;
       }
-
       .context {
         font-size: 10px;
         color: #666;
         font-style: italic;
         margin-bottom: 8px;
       }
-
       .results-list {
         max-height: 300px;
         overflow-y: auto;
@@ -401,108 +347,60 @@
         border-radius: 6px;
         background: white;
       }
-
-      .result-item {
+      .result {
         padding: 12px;
         border-bottom: 1px solid #f0f0f0;
-        cursor: pointer;
         transition: all 0.2s;
-        position: relative;
       }
-
-      .result-item:last-child {
+      .result:last-child {
         border-bottom: none;
       }
-
-      .result-item:hover {
+      .result:hover {
         background: #f0f8ff;
       }
-
-      .result-item.clicked {
-        background: #d4edda;
-        border-color: #c3e6cb;
-      }
-
       .result-header {
         display: flex;
         align-items: center;
         gap: 8px;
         margin-bottom: 4px;
       }
-
       .result-icon {
         color: #666;
       }
-
       .result-name {
         font-size: 12px;
         font-weight: 500;
         flex: 1;
       }
-
-      .result-type-badge {
+      .result-badge {
         font-size: 9px;
         padding: 2px 4px;
         background: #f0f0f0;
         color: #666;
         border-radius: 3px;
       }
-
-      .zoom-badge {
-        font-size: 9px;
-        padding: 2px 4px;
-        border-radius: 3px;
-        opacity: 0;
-        transition: opacity 0.2s;
-      }
-
-      .zoom-badge.hover {
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-        opacity: 1;
-      }
-
-      .zoom-badge.clicked {
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-        opacity: 1;
-      }
-
-      .result-item:hover .zoom-badge {
-        opacity: 1;
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-      }
-
       .result-path {
         font-size: 10px;
         color: #888;
         font-family: monospace;
         margin-bottom: 6px;
       }
-
-      .result-found-items {
+      .result-found {
         border-top: 1px solid #f0f0f0;
         padding-top: 6px;
         margin-top: 6px;
       }
-
       .result-found-title {
         font-size: 10px;
         font-weight: 600;
         color: #666;
         margin-bottom: 4px;
       }
-
       .result-found-badges {
         display: flex;
         flex-wrap: wrap;
         gap: 4px;
       }
-
       .no-results {
         text-align: center;
         padding: 24px;
@@ -510,25 +408,21 @@
         border: 1px solid #eee;
         border-radius: 6px;
       }
-
       .no-results-icon {
         font-size: 24px;
         margin-bottom: 8px;
         color: #ccc;
       }
-
       .no-results-title {
         font-size: 12px;
         font-weight: 600;
         margin-bottom: 4px;
       }
-
       .no-results-text {
         font-size: 10px;
         color: #666;
         margin-bottom: 12px;
       }
-
       .tips {
         background: #f8f9fa;
         padding: 8px;
@@ -536,20 +430,16 @@
         font-size: 10px;
         color: #666;
       }
-
       .tips-title {
         font-weight: 600;
         margin-bottom: 4px;
       }
-
       .hidden {
         display: none;
       }
-
       .spinner {
         animation: spin 1s linear infinite;
       }
-
       @keyframes spin {
         from {
           transform: rotate(0deg);
@@ -561,153 +451,143 @@
     </style>
   </head>
   <body>
-    <!-- Smart Search Scope Banner -->
-    <div class="fix-banner">
-      <div class="fix-banner-title">🧠 Smart Search Scope FIXED!</div>
-      <div class="fix-banner-text">
-        Automatically searches selection first, then expands to entire page when
-        needed
+    <div class="banner">
+      <div class="banner-title">🔍 JustGo Audit - Design System Audit Tool</div>
+      <div class="banner-text">
+        Comprehensive design system audit for variables, styles, and layer name
+        matching
       </div>
     </div>
 
     <div class="header">
-      <div class="title">🔍 Variable & Style Finder (Smart)</div>
+      <div class="title">🔍 JustGo Audit</div>
       <div class="subtitle">
-        Find layers using ANY design variable or style (local & remote). Click
-        results to zoom in Figma.
+        Design system audit tool for finding layers using variables, styles, and
+        strict layer name matching with quality assurance features.
       </div>
     </div>
 
-    <!-- Smart Search Info -->
-    <div class="scope-info">
-      <div class="scope-info-title">🎯 Smart Search Strategy:</div>
-      <div class="scope-info-text">
-        <strong>Step 1:</strong> Searches your selection first for relevant
-        layers<br />
-        <strong>Step 2:</strong> If no matches found, automatically expands to
-        search entire page<br />
-        <strong>Result:</strong> Always finds layers that use your
-        variable/style, regardless of what you have selected!
-      </div>
+    <div class="tabs">
+      <button id="variables-tab" class="tab active">
+        🔗 Variables & Styles
+      </button>
+      <button id="layers-tab" class="tab">🏷️ Layer Names</button>
     </div>
 
-    <!-- Enhanced Info Card -->
-    <div class="info-card">
-      <div class="info-header">
-        <div class="info-title">🚀 Enhanced Smart Search:</div>
-        <div style="display: flex; gap: 4px">
-          <div class="badge local">🏠 Local</div>
-          <div class="badge remote">🌐 Remote</div>
-        </div>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-section">
-          <div class="info-section-title" style="color: #0066cc">
-            Variables:
+    <div id="variables-mode">
+      <div class="info-card">
+        <div class="info-header">
+          <div class="info-title">🚀 Design System Audit:</div>
+          <div style="display: flex; gap: 4px">
+            <div class="badge local">🏠 Local</div>
+            <div class="badge remote">🌐 Remote</div>
           </div>
-          <div class="info-item"><span>🎨</span><span>Colors</span></div>
-          <div class="info-item"><span>📏</span><span>Numbers</span></div>
-          <div class="info-item"><span>📝</span><span>Strings</span></div>
-          <div class="info-item"><span>✅</span><span>Booleans</span></div>
         </div>
-        <div class="info-section">
-          <div class="info-section-title" style="color: #6f42c1">Styles:</div>
-          <div class="info-item"><span>🎨</span><span>Paint</span></div>
-          <div class="info-item"><span>📝</span><span>Text</span></div>
-          <div class="info-item"><span>✨</span><span>Effect</span></div>
-          <div class="info-item"><span>📐</span><span>Grid</span></div>
+        <div class="info-grid">
+          <div>
+            <div style="font-weight: 600; margin-bottom: 4px; color: #0066cc">
+              Variables:
+            </div>
+            <div class="info-item"><span>🎨</span><span>Colors</span></div>
+            <div class="info-item"><span>📏</span><span>Numbers</span></div>
+            <div class="info-item"><span>📝</span><span>Strings</span></div>
+            <div class="info-item"><span>✅</span><span>Booleans</span></div>
+          </div>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 4px; color: #6f42c1">
+              Styles:
+            </div>
+            <div class="info-item"><span>🎨</span><span>Paint</span></div>
+            <div class="info-item"><span>📝</span><span>Text</span></div>
+            <div class="info-item"><span>✨</span><span>Effect</span></div>
+            <div class="info-item"><span>📐</span><span>Grid</span></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Input Section -->
+    <div id="layers-mode" class="hidden">
+      <div class="info-card">
+        <div class="info-header">
+          <div class="info-title">🔒 STRICT Layer Name Audit:</div>
+          <div class="badge layer">🚫 Components Excluded</div>
+        </div>
+        <div style="font-size: 10px; color: #666; margin-bottom: 8px">
+          Audit layers by exact name within selected frames or entire page.
+          Components and instances automatically excluded.
+        </div>
+        <div class="quick-buttons">
+          <div class="quick-button" data-layer="heading-text">heading-text</div>
+          <div class="quick-button" data-layer="title-text">title-text</div>
+          <div class="quick-button" data-layer="subtitle-text">
+            subtitle-text
+          </div>
+          <div class="quick-button" data-layer="body-text">body-text</div>
+          <div class="quick-button" data-layer="highlighted-text">
+            highlighted-text
+          </div>
+          <div class="quick-button" data-layer="info-text">info-text</div>
+          <div class="quick-button" data-layer="caption-text">caption-text</div>
+          <div class="quick-button" data-layer="overline-text">
+            overline-text
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="input-section">
-      <label class="label" for="search-input"
+      <label class="label" for="search-input" id="search-label"
         >Enter variable or style name:</label
       >
-      <div class="hint">
-        Try: "Colors/warning/100", "button-primary", "heading-large", "warning",
-        etc.
+      <div class="hint" id="search-hint">
+        Try: "Colors/warning/100", "button-primary", "heading-large", etc.
       </div>
       <input
         type="text"
         id="search-input"
         class="input"
         placeholder="Colors/warning/100"
-        value="Colors/warning/100"
       />
       <button id="search-button" class="button">
         <span id="search-icon">🔍</span>
-        <span id="search-text">Find Layers</span>
+        <span id="search-text">Start Audit</span>
       </button>
     </div>
 
-    <!-- Status -->
     <div id="status" class="status hidden"></div>
 
-    <!-- Search Statistics - Always Visible After Search -->
-    <div id="search-stats" class="search-stats hidden">
-      <div class="search-stats-header">
+    <div id="search-stats" class="stats hidden">
+      <div class="stats-header">
         <div style="font-size: 16px">📊</div>
-        <div id="search-stats-title" class="search-stats-title"></div>
+        <div id="stats-title" class="stats-title"></div>
       </div>
-      <div id="search-stats-grid" class="search-stats-grid">
-        <div class="search-stat">
-          <div id="stat-checked" class="search-stat-number">0</div>
-          <div class="search-stat-label">Nodes<br />Checked</div>
+      <div class="stats-grid">
+        <div class="stat">
+          <div id="stat-checked" class="stat-number">0</div>
+          <div class="stat-label">Nodes<br />Audited</div>
         </div>
-        <div class="search-stat">
-          <div id="stat-with-items" class="search-stat-number">0</div>
-          <div class="search-stat-label">With<br />Variables/Styles</div>
+        <div class="stat">
+          <div id="stat-with-items" class="stat-number">0</div>
+          <div class="stat-label">With<br />Design Tokens</div>
         </div>
-        <div class="search-stat">
-          <div id="stat-matching" class="search-stat-number">0</div>
-          <div class="search-stat-label">Matching<br />Search</div>
+        <div class="stat">
+          <div id="stat-matching" class="stat-number">0</div>
+          <div class="stat-label">Matching<br />Criteria</div>
         </div>
-      </div>
-      <div id="search-stats-details" class="search-stats-details hidden">
-        <div class="search-stats-section">
-          <div class="search-stats-section-title">
-            Variables Found in Design:
-          </div>
-          <div id="stats-variables-list" class="search-stats-list"></div>
-        </div>
-        <div class="search-stats-section">
-          <div class="search-stats-section-title">Styles Found in Design:</div>
-          <div id="stats-styles-list" class="search-stats-list"></div>
-        </div>
-      </div>
-      <div style="text-align: center; margin-top: 8px">
-        <button
-          id="toggle-stats-details"
-          style="
-            background: none;
-            border: none;
-            color: #856404;
-            font-size: 10px;
-            cursor: pointer;
-            text-decoration: underline;
-          "
-        >
-          Show Details
-        </button>
       </div>
     </div>
 
-    <!-- Found Items -->
     <div id="found-items" class="found-items hidden">
-      <div class="found-items-header">
+      <div class="found-header">
         <div style="font-size: 16px">🎯</div>
-        <div id="found-items-title" class="found-items-title"></div>
+        <div id="found-title" class="found-title"></div>
       </div>
-      <div id="found-items-list"></div>
+      <div id="found-list"></div>
     </div>
 
-    <!-- Results Section -->
-    <div id="results-section" class="results-section hidden">
+    <div id="results-section" class="results hidden">
       <div class="results-header">
-        <div class="results-title">Results:</div>
+        <div class="results-title">Audit Results:</div>
         <div id="results-count" class="results-count">0 found</div>
       </div>
       <div id="context" class="context"></div>
@@ -715,199 +595,150 @@
     </div>
 
     <script>
-      // UI Elements
-      const searchInput = document.getElementById("search-input");
-      const searchButton = document.getElementById("search-button");
-      const searchIcon = document.getElementById("search-icon");
-      const searchText = document.getElementById("search-text");
-      const status = document.getElementById("status");
+      const elements = {
+        input: document.getElementById("search-input"),
+        button: document.getElementById("search-button"),
+        icon: document.getElementById("search-icon"),
+        text: document.getElementById("search-text"),
+        label: document.getElementById("search-label"),
+        hint: document.getElementById("search-hint"),
+        status: document.getElementById("status"),
+        variablesTab: document.getElementById("variables-tab"),
+        layersTab: document.getElementById("layers-tab"),
+        variablesMode: document.getElementById("variables-mode"),
+        layersMode: document.getElementById("layers-mode"),
+        quickButtons: document.querySelectorAll(".quick-button"),
+        stats: document.getElementById("search-stats"),
+        statsTitle: document.getElementById("stats-title"),
+        statChecked: document.getElementById("stat-checked"),
+        statWithItems: document.getElementById("stat-with-items"),
+        statMatching: document.getElementById("stat-matching"),
+        foundItems: document.getElementById("found-items"),
+        foundTitle: document.getElementById("found-title"),
+        foundList: document.getElementById("found-list"),
+        results: document.getElementById("results-section"),
+        resultsCount: document.getElementById("results-count"),
+        context: document.getElementById("context"),
+        container: document.getElementById("results-container"),
+      };
 
-      // Search Stats Elements
-      const searchStats = document.getElementById("search-stats");
-      const searchStatsTitle = document.getElementById("search-stats-title");
-      const statChecked = document.getElementById("stat-checked");
-      const statWithItems = document.getElementById("stat-with-items");
-      const statMatching = document.getElementById("stat-matching");
-      const searchStatsDetails = document.getElementById(
-        "search-stats-details",
-      );
-      const statsVariablesList = document.getElementById(
-        "stats-variables-list",
-      );
-      const statsStylesList = document.getElementById("stats-styles-list");
-      const toggleStatsDetails = document.getElementById(
-        "toggle-stats-details",
-      );
-
-      const foundItems = document.getElementById("found-items");
-      const foundItemsTitle = document.getElementById("found-items-title");
-      const foundItemsList = document.getElementById("found-items-list");
-      const resultsSection = document.getElementById("results-section");
-      const resultsCount = document.getElementById("results-count");
-      const context = document.getElementById("context");
-      const resultsContainer = document.getElementById("results-container");
-
-      // State
       let isSearching = false;
-      let clickedResults = new Set();
-      let statsDetailsVisible = false;
+      let currentMode = "variables";
 
-      // Helper functions
       function showStatus(message, type = "info") {
-        status.textContent = message;
-        status.className = "status " + type;
-        status.classList.remove("hidden");
+        elements.status.textContent = message;
+        elements.status.className = "status " + type;
+        elements.status.classList.remove("hidden");
       }
 
       function hideStatus() {
-        status.classList.add("hidden");
+        elements.status.classList.add("hidden");
       }
 
       function setSearching(searching) {
         isSearching = searching;
-        searchButton.disabled = searching;
-
+        elements.button.disabled = searching;
         if (searching) {
-          searchIcon.textContent = "⏳";
-          searchIcon.classList.add("spinner");
-          searchText.textContent = "Smart scope search...";
+          elements.icon.textContent = "⏳";
+          elements.icon.classList.add("spinner");
+          elements.text.textContent =
+            currentMode === "variables"
+              ? "Auditing design tokens..."
+              : "Auditing layer names...";
         } else {
-          searchIcon.textContent = "🔍";
-          searchIcon.classList.remove("spinner");
-          searchText.textContent = "Find Layers";
+          elements.icon.textContent = "🔍";
+          elements.icon.classList.remove("spinner");
+          elements.text.textContent = "Start Audit";
         }
       }
 
-      function displaySearchStatistics(stats, scopeInfo) {
+      function switchMode(mode) {
+        currentMode = mode;
+        elements.variablesTab.classList.toggle("active", mode === "variables");
+        elements.layersTab.classList.toggle("active", mode === "layers");
+        elements.variablesMode.classList.toggle("hidden", mode !== "variables");
+        elements.layersMode.classList.toggle("hidden", mode !== "layers");
+
+        if (mode === "variables") {
+          elements.label.textContent = "Enter variable or style name:";
+          elements.hint.textContent =
+            'Try: "Colors/warning/100", "button-primary", etc.';
+          elements.input.placeholder = "Colors/warning/100";
+        } else {
+          elements.label.textContent = "Enter exact layer name:";
+          elements.hint.textContent =
+            "Only allowed: heading-text, title-text, subtitle-text, body-text, etc.";
+          elements.input.placeholder = "heading-text";
+        }
+
+        hideStatus();
+        elements.foundItems.classList.add("hidden");
+        elements.results.classList.add("hidden");
+        elements.stats.classList.add("hidden");
+        elements.quickButtons.forEach((btn) =>
+          btn.classList.remove("selected"),
+        );
+      }
+
+      function displayStats(stats, scopeInfo) {
         if (!stats) {
-          searchStats.classList.add("hidden");
+          elements.stats.classList.add("hidden");
           return;
         }
 
-        let title = "Smart Search Statistics:";
-        if (scopeInfo && scopeInfo.expandedToPage) {
-          if (scopeInfo.searchedSelection && !scopeInfo.selectionHadVariables) {
-            title =
-              "🧠 Smart Search: Selection → Page (no variables in selection)";
-          } else if (
-            scopeInfo.searchedSelection &&
-            scopeInfo.selectionHadVariables
-          ) {
-            title =
-              "🧠 Smart Search: Selection → Page (no matches in selection)";
-          } else {
-            title = "🧠 Smart Search: Page scope";
-          }
+        let title = "Audit Statistics:";
+        if (
+          currentMode === "variables" &&
+          scopeInfo &&
+          scopeInfo.expandedToPage
+        ) {
+          title = scopeInfo.searchedSelection
+            ? "🧠 Smart Audit: Selection → Page"
+            : "🧠 Smart Audit: Page scope";
+        } else if (currentMode === "layers") {
+          title = "🔒 Strict Layer Audit:";
         }
 
-        searchStatsTitle.textContent = title;
-        statChecked.textContent = stats.checkedNodes;
-        statWithItems.textContent = stats.nodesWithItems;
-        statMatching.textContent = stats.matchingNodes;
-
-        // Display unique variables and styles found
-        if (stats.uniqueVariables && stats.uniqueVariables.length > 0) {
-          statsVariablesList.innerHTML = stats.uniqueVariables
-            .map((v) => `• ${v}`)
-            .join("<br>");
-        } else {
-          statsVariablesList.innerHTML =
-            '<span class="search-stats-empty">None found</span>';
-        }
-
-        if (stats.uniqueStyles && stats.uniqueStyles.length > 0) {
-          statsStylesList.innerHTML = stats.uniqueStyles
-            .map((s) => `• ${s}`)
-            .join("<br>");
-        } else {
-          statsStylesList.innerHTML =
-            '<span class="search-stats-empty">None found</span>';
-        }
-
-        searchStats.classList.remove("hidden");
+        elements.statsTitle.textContent = title;
+        elements.statChecked.textContent = stats.checkedNodes;
+        elements.statWithItems.textContent = stats.nodesWithItems;
+        elements.statMatching.textContent = stats.matchingNodes;
+        elements.stats.classList.remove("hidden");
       }
 
-      // Toggle stats details
-      toggleStatsDetails.addEventListener("click", function () {
-        statsDetailsVisible = !statsDetailsVisible;
-        if (statsDetailsVisible) {
-          searchStatsDetails.classList.remove("hidden");
-          toggleStatsDetails.textContent = "Hide Details";
-        } else {
-          searchStatsDetails.classList.add("hidden");
-          toggleStatsDetails.textContent = "Show Details";
-        }
-      });
-
-      function getVariableTypeIcon(type) {
-        switch (type) {
-          case "COLOR":
-            return "🎨";
-          case "FLOAT":
-            return "📏";
-          case "STRING":
-            return "📝";
-          case "BOOLEAN":
-            return "✅";
-          default:
-            return "🔧";
-        }
-      }
-
-      function getStyleTypeIcon(type) {
-        switch (type) {
-          case "PAINT":
-            return "🎨";
-          case "TEXT":
-            return "📝";
-          case "EFFECT":
-            return "✨";
-          case "GRID":
-            return "📐";
-          default:
-            return "🔧";
-        }
-      }
-
-      function getLayerIcon(type) {
-        switch (type) {
-          case "RECTANGLE":
-            return "⬜";
-          case "GROUP":
-            return "📁";
-          case "VECTOR":
-            return "🔺";
-          case "COMPONENT":
-            return "🧩";
-          case "TEXT":
-            return "📝";
-          case "FRAME":
-            return "🖼️";
-          case "ELLIPSE":
-            return "⭕";
-          default:
-            return "⬜";
-        }
+      function getIcons() {
+        return {
+          variable: { COLOR: "🎨", FLOAT: "📏", STRING: "📝", BOOLEAN: "✅" },
+          style: { PAINT: "🎨", TEXT: "📝", EFFECT: "✨", GRID: "📐" },
+          layer: {
+            RECTANGLE: "⬜",
+            GROUP: "📁",
+            VECTOR: "🔺",
+            COMPONENT: "🧩",
+            TEXT: "📝",
+            FRAME: "🖼️",
+            ELLIPSE: "⭕",
+          },
+        };
       }
 
       function displayFoundItems(items) {
-        if (!items || items.length === 0) {
-          foundItems.classList.add("hidden");
+        if (!items || items.length === 0 || currentMode === "layers") {
+          elements.foundItems.classList.add("hidden");
           return;
         }
 
-        foundItemsTitle.textContent = `Found ${items.length} matching item(s):`;
-        foundItemsList.innerHTML = "";
+        const icons = getIcons();
+        elements.foundTitle.textContent = `Found ${items.length} matching design tokens:`;
+        elements.foundList.innerHTML = "";
 
         items.forEach((item) => {
           const itemEl = document.createElement("div");
           itemEl.className = "found-item";
-
           const icon =
             item.type === "VARIABLE"
-              ? getVariableTypeIcon(item.resolvedType)
-              : getStyleTypeIcon(item.styleType);
-
+              ? icons.variable[item.resolvedType] || "🔧"
+              : icons.style[item.styleType] || "🔧";
           const badges = [
             `<span class="badge ${item.type.toLowerCase()}">${
               item.type === "VARIABLE" ? "🔗 Variable" : "🎨 Style"
@@ -921,193 +752,134 @@
           ];
 
           itemEl.innerHTML = `
-                    <div class="found-item-icon">${icon}</div>
-                    <div class="found-item-details">
-                        <div class="found-item-name">${item.name}</div>
-                        <div class="found-item-badges">${badges.join("")}</div>
+                    <div class="found-icon">${icon}</div>
+                    <div class="found-details">
+                        <div class="found-name">${item.name}</div>
+                        <div class="found-badges">${badges.join("")}</div>
                     </div>
                 `;
-
-          foundItemsList.appendChild(itemEl);
+          elements.foundList.appendChild(itemEl);
         });
-
-        foundItems.classList.remove("hidden");
+        elements.foundItems.classList.remove("hidden");
       }
 
-      function displayResults(
-        results,
-        searchTerm,
-        searchContext,
-        totalSearched,
-        scopeInfo,
-      ) {
-        resultsCount.textContent = `${results.length} found`;
-        context.textContent = `Searched in: ${searchContext}`;
+      function displayResults(results, searchTerm, searchContext, searchType) {
+        elements.resultsCount.textContent = `${results.length} found`;
+        elements.context.textContent = `Audited scope: ${searchContext}`;
 
         if (results.length === 0) {
-          let tipsContent = `
-                    <div class="tips-title">🧠 Smart Search Scope Fixed:</div>
-                    <div>• Automatically searches selection first, then entire page</div>
-                    <div>• No more "found variable but 0 results" issues</div>
-                    <div>• Always finds layers that actually use your variables/styles</div>
-                `;
+          const tips =
+            searchType === "LAYER_NAME"
+              ? '<div class="tips-title">🔒 Strict Layer Audit Tips:</div><div>• Only exact layer name matching</div><div>• Components & instances excluded</div><div>• Use allowed names only</div>'
+              : '<div class="tips-title">🔍 Design System Audit Tips:</div><div>• Comprehensive variables & styles detection</div><div>• Smart scope with automatic expansion</div><div>• Try different design token names</div>';
 
-          if (
-            scopeInfo &&
-            scopeInfo.searchedSelection &&
-            !scopeInfo.selectionHadVariables
-          ) {
-            tipsContent = `
-                        <div class="tips-title">🎯 Smart Search Analysis:</div>
-                        <div>• Your selection had no variables/styles</div>
-                        <div>• Automatically expanded search to entire page</div>
-                        <div>• No layers found using "${searchTerm}" anywhere</div>
-                        <div>• Try a different variable/style name that exists in your design</div>
-                    `;
-          } else if (scopeInfo && scopeInfo.searchedSelection) {
-            tipsContent = `
-                        <div class="tips-title">🎯 Smart Search Analysis:</div>
-                        <div>• Your selection had some variables/styles but none matched</div>
-                        <div>• Automatically expanded search to entire page</div>
-                        <div>• No layers found using "${searchTerm}" anywhere</div>
-                        <div>• The variable/style might not be used in this design</div>
-                    `;
-          }
-
-          resultsContainer.innerHTML = `
+          elements.container.innerHTML = `
                     <div class="no-results">
                         <div class="no-results-icon">🔍</div>
                         <div class="no-results-title">No layers found</div>
-                        <div class="no-results-text">No layers are using the variable or style "${searchTerm}"</div>
-                        <div class="tips">
-                            ${tipsContent}
-                        </div>
+                        <div class="no-results-text">No layers found ${
+                          searchType === "LAYER_NAME" ? "with name" : "using"
+                        } "${searchTerm}"</div>
+                        <div class="tips">${tips}</div>
                     </div>
                 `;
         } else {
+          const icons = getIcons();
           const resultsList = document.createElement("div");
           resultsList.className = "results-list";
 
           results.forEach((result) => {
             const resultEl = document.createElement("div");
-            resultEl.className = "result-item";
-            resultEl.dataset.nodeId = result.id;
+            resultEl.className = "result";
 
             let foundItemsHtml = "";
-            if (result.foundItems && result.foundItems.length > 0) {
+            if (
+              result.foundItems &&
+              result.foundItems.length > 0 &&
+              searchType !== "LAYER_NAME"
+            ) {
               const badges = result.foundItems
                 .map((item) => {
                   const icon =
                     item.type === "VARIABLE"
-                      ? getVariableTypeIcon(item.resolvedType)
-                      : getStyleTypeIcon(item.styleType);
-                  const className =
-                    item.type === "VARIABLE" ? "variable" : "style";
-                  return `<span class="badge ${className}">${icon} ${item.name}</span>`;
+                      ? icons.variable[item.resolvedType] || "🔧"
+                      : icons.style[item.styleType] || "🔧";
+                  return `<span class="badge ${item.type.toLowerCase()}">${icon} ${
+                    item.name
+                  }</span>`;
                 })
                 .join("");
-
-              foundItemsHtml = `
-                            <div class="result-found-items">
-                                <div class="result-found-title">Found:</div>
-                                <div class="result-found-badges">${badges}</div>
-                            </div>
-                        `;
+              foundItemsHtml = `<div class="result-found"><div class="result-found-title">Design Tokens Found:</div><div class="result-found-badges">${badges}</div></div>`;
+            } else if (searchType === "LAYER_NAME") {
+              foundItemsHtml = `<div class="result-found"><div class="result-found-title">Audit Match:</div><div class="result-found-badges"><span class="badge layer">🏷️ Exact Layer Name</span><span class="badge">🔒 STRICT</span></div></div>`;
             }
 
             resultEl.innerHTML = `
                         <div class="result-header">
-                            <div class="result-icon">${getLayerIcon(
-                              result.type,
-                            )}</div>
+                            <div class="result-icon">${
+                              icons.layer[result.type] || "⬜"
+                            }</div>
                             <div class="result-name">${result.name}</div>
-                            <div class="result-type-badge">${result.type}</div>
-                            <div class="zoom-badge">🎯 Click to zoom</div>
+                            <div class="result-badge">${result.type}</div>
                         </div>
                         <div class="result-path">${result.path}</div>
                         ${foundItemsHtml}
                     `;
-
-            resultEl.addEventListener("click", function () {
-              handleResultClick(result, this);
-            });
-
             resultsList.appendChild(resultEl);
           });
 
-          resultsContainer.innerHTML = "";
-          resultsContainer.appendChild(resultsList);
+          elements.container.innerHTML = "";
+          elements.container.appendChild(resultsList);
         }
-
-        resultsSection.classList.remove("hidden");
-      }
-
-      function handleResultClick(result, element) {
-        console.log("🎯 Clicking to zoom to:", result.name);
-
-        // Visual feedback
-        clickedResults.add(result.id);
-        element.classList.add("clicked");
-
-        const zoomBadge = element.querySelector(".zoom-badge");
-        zoomBadge.textContent = "✅ Zoomed!";
-        zoomBadge.classList.add("clicked");
-
-        // Send zoom message
-        parent.postMessage(
-          {
-            pluginMessage: {
-              type: "zoom-to-layer",
-              nodeId: result.id,
-              nodeName: result.name,
-            },
-          },
-          "*",
-        );
-
-        // Reset visual feedback after delay
-        setTimeout(() => {
-          element.classList.remove("clicked");
-          zoomBadge.textContent = "🎯 Click to zoom";
-          zoomBadge.classList.remove("clicked");
-        }, 2000);
+        elements.results.classList.remove("hidden");
       }
 
       function handleSearch() {
-        const searchTerm = searchInput.value.trim();
-
+        const searchTerm = elements.input.value.trim();
         if (!searchTerm) {
           showStatus("Please enter a search term", "error");
           return;
         }
 
-        console.log("🔍 Starting smart scope search for:", searchTerm);
-
+        console.log(
+          "🔍 JustGo Audit: Starting search:",
+          searchTerm,
+          "Mode:",
+          currentMode,
+        );
         setSearching(true);
         hideStatus();
-        foundItems.classList.add("hidden");
-        resultsSection.classList.add("hidden");
-        clickedResults.clear();
+        elements.foundItems.classList.add("hidden");
+        elements.results.classList.add("hidden");
 
-        // Send search message to plugin
+        const messageType =
+          currentMode === "variables"
+            ? "find-variables-and-styles"
+            : "find-layer-names";
         parent.postMessage(
-          {
-            pluginMessage: {
-              type: "find-variables-and-styles",
-              searchTerm: searchTerm,
-            },
-          },
+          { pluginMessage: { type: messageType, searchTerm } },
           "*",
         );
       }
 
       // Event listeners
-      searchButton.addEventListener("click", handleSearch);
+      elements.button.addEventListener("click", handleSearch);
+      elements.input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") handleSearch();
+      });
+      elements.variablesTab.addEventListener("click", () =>
+        switchMode("variables"),
+      );
+      elements.layersTab.addEventListener("click", () => switchMode("layers"));
 
-      searchInput.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-          handleSearch();
-        }
+      elements.quickButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          elements.input.value = this.dataset.layer;
+          elements.quickButtons.forEach((btn) =>
+            btn.classList.remove("selected"),
+          );
+          this.classList.add("selected");
+        });
       });
 
       // Handle messages from plugin
@@ -1115,55 +887,59 @@
         const msg = event.data.pluginMessage;
         if (!msg) return;
 
-        console.log("📨 Message from plugin:", msg.type);
+        console.log("📨 JustGo Audit: Message:", msg.type);
 
         switch (msg.type) {
           case "search-results":
             setSearching(false);
+            if (msg.searchStatistics)
+              displayStats(msg.searchStatistics, msg.scopeInfo);
 
-            // Always show search statistics with scope info
-            if (msg.searchStatistics) {
-              displaySearchStatistics(msg.searchStatistics, msg.scopeInfo);
-            }
-
-            // Show appropriate status based on scope and results
-            if (msg.scopeInfo && msg.scopeInfo.expandedToPage) {
-              if (msg.results.length > 0) {
+            if (msg.searchType === "LAYER_NAME") {
+              if (msg.strictError) {
+                showStatus(`🔒 ${msg.strictError}`, "error");
+              } else if (msg.results.length > 0) {
                 showStatus(
-                  `🧠 Smart search expanded to page - found ${msg.results.length} layers using "${msg.searchTerm}"`,
+                  `✅ Audit found ${msg.results.length} layers named "${msg.searchTerm}"`,
                   "success",
-                );
-              } else if (
-                msg.scopeInfo.searchedSelection &&
-                !msg.scopeInfo.selectionHadVariables
-              ) {
-                showStatus(
-                  `🧠 Selection had no variables/styles - expanded to page but found no matches`,
-                  "warning",
                 );
               } else {
                 showStatus(
-                  `🧠 Selection didn't match - expanded to page but no layers use "${msg.searchTerm}"`,
-                  "info",
+                  `⚠️ Audit found no layers named "${msg.searchTerm}"`,
+                  "warning",
                 );
               }
-            } else if (msg.results.length > 0) {
-              showStatus(
-                `✅ Found ${msg.results.length} layers using "${msg.searchTerm}" in selection`,
-                "success",
-              );
+            } else {
+              if (msg.scopeInfo && msg.scopeInfo.expandedToPage) {
+                const reason = !msg.scopeInfo.selectionHadVariables
+                  ? "no design tokens in selection"
+                  : "no matches in selection";
+                if (msg.results.length > 0) {
+                  showStatus(
+                    `🧠 Smart audit expanded to page - found ${msg.results.length} layers`,
+                    "success",
+                  );
+                } else {
+                  showStatus(
+                    `🧠 Expanded to page (${reason}) but no matches found`,
+                    "warning",
+                  );
+                }
+              } else if (msg.results.length > 0) {
+                showStatus(
+                  `✅ Audit found ${msg.results.length} layers using "${msg.searchTerm}"`,
+                  "success",
+                );
+              }
             }
 
-            if (msg.foundItems && msg.foundItems.length > 0) {
+            if (msg.foundItems && msg.foundItems.length > 0)
               displayFoundItems(msg.foundItems);
-            }
-
             displayResults(
               msg.results,
               msg.searchTerm,
               msg.context,
-              msg.totalSearched,
-              msg.scopeInfo,
+              msg.searchType,
             );
             break;
 
@@ -1171,26 +947,10 @@
             setSearching(false);
             showStatus(msg.message, "error");
             break;
-
-          case "zoom-result":
-            if (msg.success) {
-              showStatus(
-                `✅ Zoomed to "${msg.nodeName}" successfully`,
-                "success",
-              );
-            } else {
-              showStatus(
-                `❌ Could not zoom to "${msg.nodeName}": ${msg.error}`,
-                "error",
-              );
-            }
-            break;
         }
       };
 
-      console.log(
-        "🚀 Variable & Style Finder SMART SCOPE UI loaded and ready!",
-      );
+      console.log("🚀 JustGo Audit UI ready!");
     </script>
   </body>
 </html>
