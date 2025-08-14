@@ -841,12 +841,6 @@
           return;
         }
 
-        console.log(
-          "🔍 JustGo Audit: Starting search:",
-          searchTerm,
-          "Mode:",
-          currentMode,
-        );
         setSearching(true);
         hideStatus();
         elements.foundItems.classList.add("hidden");
@@ -886,8 +880,6 @@
       window.onmessage = function (event) {
         const msg = event.data.pluginMessage;
         if (!msg) return;
-
-        console.log("📨 JustGo Audit: Message:", msg.type);
 
         switch (msg.type) {
           case "search-results":
@@ -949,8 +941,6 @@
             break;
         }
       };
-
-      console.log("🚀 JustGo Audit UI ready!");
     </script>
   </body>
 </html>
