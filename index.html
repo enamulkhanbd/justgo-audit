@@ -1,227 +1,137 @@
-import React from 'react'; const App = () => { return (
-<div
-  className="min-h-screen bg-gray-900 text-gray-200 font-sans p-4 antialiased"
->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    {`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JustGo Audit</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
       @import url('https://rsms.me/inter/inter.css');
-      html, body { font-family: 'Inter', sans-serif; }
-    `}
-  </style>
-
-  {/* Hero Section */}
-  <header className="py-20 text-center">
-    <h1
-      className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-4"
-    >
-      JustGo Audit
-    </h1>
-    <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-      A comprehensive design system audit tool for Figma that helps you find
-      layers using variables, styles, and strict layer name matching. Perfect
-      for design system quality assurance and maintenance.
-    </p>
-    <div className="mt-8">
-      <a
-        href="https://github.com/enamulkhanbd/justgo-audit"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-block px-8 py-3 rounded-full text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300 shadow-lg"
-      >
-        Go to GitHub
-      </a>
-    </div>
-  </header>
-
-  {/* Main Content Container */}
-  <main className="container mx-auto px-4">
-    {/* Features Section */}
-    <section className="py-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {/* Feature Card 1 */}
-        <div
-          className="bg-gray-800 rounded-xl p-8 shadow-xl border border-gray-700"
-        >
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="p-3 bg-indigo-500 rounded-full">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-white"
-              >
-                <path d="m18 15-6-6-6 6" />
-              </svg>
-            </div>
-            <h3 className="text-2xl font-bold text-white">
-              Variables & Styles Mode
-            </h3>
-          </div>
-          <ul className="text-gray-400 list-disc list-inside space-y-2">
-            <li>
-              Comprehensive Variable Detection: Find layers using design
-              variables.
-            </li>
-            <li>
-              Complete Style Detection: Locate layers with paint, text, effect,
-              and grid styles.
-            </li>
-            <li>
-              Local & Remote Support: Works with both local tokens and remote
-              library components.
-            </li>
-          </ul>
-        </div>
-
-        {/* Feature Card 2 */}
-        <div
-          className="bg-gray-800 rounded-xl p-8 shadow-xl border border-gray-700"
-        >
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="p-3 bg-indigo-500 rounded-full">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-white"
-              >
-                <path d="M12 11h.01" />
-                <path d="M11 15h2" />
-                <path d="M10 20h4" />
-                <path d="M14 2c-.5 0-1 .5-1 1s-.5 1-1 1-1-.5-1-1-.5-1-1-1" />
-                <path d="M9 20v-4" />
-                <path d="M15 20v-4" />
-                <path d="M8 8s0-2 4-2 4 2 4 2" />
-                <path
-                  d="M16 20h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"
-                />
-              </svg>
-            </div>
-            <h3 className="text-2xl font-bold text-white">
-              Strict Layer Name Search
-            </h3>
-          </div>
-          <ul className="text-gray-400 list-disc list-inside space-y-2">
-            <li>
-              Exact Name Matching: Find layers by precise layer names only.
-            </li>
-            <li>
-              Component Exclusion: Automatically excludes COMPONENT and INSTANCE
-              types.
-            </li>
-            <li>
-              Predefined Validation: Only allows specific, predefined layer
-              names.
-            </li>
-          </ul>
-        </div>
-
-        {/* Feature Card 3 */}
-        <div
-          className="bg-gray-800 rounded-xl p-8 shadow-xl border border-gray-700"
-        >
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="p-3 bg-indigo-500 rounded-full">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-white"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                <path d="M2 17l10 5 10-5" />
-                <path d="M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <h3 className="text-2xl font-bold text-white">Smart Features</h3>
-          </div>
-          <ul className="text-gray-400 list-disc list-inside space-y-2">
-            <li>
-              Intelligent Scope Selection: Searches selection first, then
-              expands to the page.
-            </li>
-            <li>
-              Detailed Statistics: Get stats on nodes checked and design tokens
-              found.
-            </li>
-            <li>
-              Click to Navigate: Select and zoom to any layer from search
-              results.
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    {/* Installation Section */}
-    <section className="py-16 text-center">
-      <h2 className="text-3xl font-bold text-white mb-4">
-        Installation for Development
-      </h2>
-      <p className="text-gray-400 max-w-3xl mx-auto mb-6">
-        To get started with JustGo Audit for development, simply follow these
-        steps.
+      html, body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-900 text-gray-200 antialiased">
+    <!-- Hero Section -->
+    <header class="py-20 text-center p-4">
+      <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-4">
+        JustGo Audit
+      </h1>
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+        A comprehensive design system audit tool for Figma that helps you find layers using variables, styles, and strict layer name matching.
+        Perfect for design system quality assurance and maintenance.
       </p>
-      <div
-        className="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 max-w-2xl mx-auto"
-      >
-        <ol
-          className="list-decimal list-inside text-left text-gray-300 space-y-2"
+      <div class="mt-8">
+        <a
+          href="https://github.com/enamulkhanbd/justgo-audit"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block px-8 py-3 rounded-full text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300 shadow-lg"
         >
-          <li>Download or clone the repository.</li>
-          <li>Open the Figma Desktop App.</li>
-          <li>
-            Go to
-            <code className="bg-gray-700 px-1 rounded"
-              >Plugins → Development → Import plugin from manifest...</code
-            >
-          </li>
-          <li>
-            Select the
-            <code className="bg-gray-700 px-1 rounded">manifest.json</code> file
-            from the downloaded folder.
-          </li>
-          <li>
-            The plugin will appear in your plugins list as "JustGo Audit".
-          </li>
-        </ol>
+          Go to GitHub
+        </a>
+        <!-- Added a new download button -->
+        <a
+          href="#"
+          class="inline-flex items-center px-8 py-3 rounded-full text-lg font-semibold bg-gray-700 hover:bg-gray-600 transition-colors duration-300 shadow-lg ml-4"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download Latest Release
+        </a>
       </div>
-    </section>
-  </main>
+    </header>
 
-  {/* Footer */}
-  <footer className="py-8 text-center text-gray-500">
-    <p>
-      &copy; 2025 JustGo Audit. All rights reserved.
-      <br />
-      <a
-        href="https://github.com/enamulkhanbd/justgo-audit"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-indigo-400 hover:text-indigo-300 transition-colors duration-300"
-      >
-        Visit us on GitHub
-      </a>
-    </p>
-  </footer>
-</div>
-); }; export default App;
+    <!-- Main Content Container -->
+    <main class="container mx-auto px-4">
+      <!-- Features Section -->
+      <section class="py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Feature Card 1 -->
+          <div class="bg-gray-800 rounded-xl p-8 shadow-xl border border-gray-700">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="p-3 bg-indigo-500 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="m18 15-6-6-6 6"/></svg>
+              </div>
+              <h3 class="text-2xl font-bold text-white">Variables & Styles Mode</h3>
+            </div>
+            <ul class="text-gray-400 list-disc list-inside space-y-2">
+              <li>Comprehensive Variable Detection: Find layers using design variables.</li>
+              <li>Complete Style Detection: Locate layers with paint, text, effect, and grid styles.</li>
+              <li>Local & Remote Support: Works with both local tokens and remote library components.</li>
+            </ul>
+          </div>
+
+          <!-- Feature Card 2 -->
+          <div class="bg-gray-800 rounded-xl p-8 shadow-xl border border-gray-700">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="p-3 bg-indigo-500 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M12 11h.01"/><path d="M11 15h2"/><path d="M10 20h4"/><path d="M14 2c-.5 0-1 .5-1 1s-.5 1-1 1-1-.5-1-1-.5-1-1-1"/><path d="M9 20v-4"/><path d="M15 20v-4"/><path d="M8 8s0-2 4-2 4 2 4 2"/><path d="M16 20h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/></svg>
+              </div>
+              <h3 class="text-2xl font-bold text-white">Strict Layer Name Search</h3>
+            </div>
+            <ul class="text-gray-400 list-disc list-inside space-y-2">
+              <li>Exact Name Matching: Find layers by precise layer names only.</li>
+              <li>Component Exclusion: Automatically excludes COMPONENT and INSTANCE types.</li>
+              <li>Predefined Validation: Only allows specific, predefined layer names.</li>
+            </ul>
+          </div>
+
+          <!-- Feature Card 3 -->
+          <div class="bg-gray-800 rounded-xl p-8 shadow-xl border border-gray-700">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="p-3 bg-indigo-500 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <h3 class="text-2xl font-bold text-white">Smart Features</h3>
+            </div>
+            <ul class="text-gray-400 list-disc list-inside space-y-2">
+              <li>Intelligent Scope Selection: Searches selection first, then expands to the page.</li>
+              <li>Detailed Statistics: Get stats on nodes checked and design tokens found.</li>
+              <li>Click to Navigate: Select and zoom to any layer from search results.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Installation Section -->
+      <section class="py-16 text-center">
+        <h2 class="text-3xl font-bold text-white mb-4">Installation for Development</h2>
+        <p class="text-gray-400 max-w-3xl mx-auto mb-6">
+          To get started with JustGo Audit for development, simply follow these steps.
+        </p>
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 max-w-2xl mx-auto">
+          <ol class="list-decimal list-inside text-left text-gray-300 space-y-2">
+            <li>Download or clone the repository.</li>
+            <li>Open the Figma Desktop App.</li>
+            <li>Go to <code class="bg-gray-700 px-1 rounded">Plugins → Development → Import plugin from manifest...</code></li>
+            <li>Select the <code class="bg-gray-700 px-1 rounded">manifest.json</code> file from the downloaded folder.</li>
+            <li>The plugin will appear in your plugins list as "JustGo Audit".</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-500">
+      <p>
+        &copy; 2025 JustGo Audit. All rights reserved.
+        <br/>
+        <a
+          href="https://github.com/enamulkhanbd/justgo-audit"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-indigo-400 hover:text-indigo-300 transition-colors duration-300"
+        >
+          Visit us on GitHub
+        </a>
+      </p>
+    </footer>
+
+</body>
+</html>
