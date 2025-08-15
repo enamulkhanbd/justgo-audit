@@ -2,945 +2,361 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <title>JustGo Audit</title>
     <style>
-      body {
-        font-family: "Inter", sans-serif;
-        font-size: 12px;
-        padding: 16px;
-        margin: 0;
-        color: #333;
-        background: #fff;
-        line-height: 1.4;
-      }
-      .header {
-        text-align: center;
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #eee;
-      }
-      .title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 4px;
-      }
-      .subtitle {
-        font-size: 11px;
-        color: #666;
-        line-height: 1.3;
-      }
-      .banner {
-        background: #dcfce7;
-        border: 1px solid #16a34a;
-        border-radius: 6px;
-        padding: 12px;
-        margin-bottom: 16px;
-        text-align: center;
-      }
-      .banner-title {
-        font-size: 12px;
-        font-weight: 600;
-        color: #15803d;
-        margin-bottom: 4px;
-      }
-      .banner-text {
-        font-size: 10px;
-        color: #166534;
-      }
-      .tabs {
-        display: flex;
-        margin-bottom: 16px;
-        border-radius: 6px;
-        overflow: hidden;
-        border: 1px solid #e5e7eb;
-        background: #f9fafb;
-      }
-      .tab {
-        flex: 1;
-        padding: 10px 12px;
-        font-size: 11px;
-        font-weight: 500;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s;
-        border: none;
-        background: transparent;
-      }
-      .tab.active {
-        background: #2563eb;
-        color: white;
-      }
-      .tab:hover:not(.active) {
-        background: #e5e7eb;
-      }
-      .info-card {
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 6px;
-        padding: 12px;
-        margin-bottom: 16px;
-      }
-      .info-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-      }
-      .info-title {
-        font-size: 12px;
-        font-weight: 600;
-      }
-      .info-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        font-size: 10px;
-      }
-      .info-item {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        margin-bottom: 2px;
-      }
-      .quick-buttons {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        margin-bottom: 8px;
-      }
-      .quick-button {
-        padding: 6px 8px;
-        font-size: 10px;
-        background: #f3f4f6;
-        border: 1px solid #d1d5db;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.2s;
-        text-align: center;
-      }
-      .quick-button:hover {
-        background: #e5e7eb;
-      }
-      .quick-button.selected {
-        background: #dbeafe;
-        border-color: #2563eb;
-        color: #1d4ed8;
-      }
-      .input-section {
-        margin-bottom: 16px;
-      }
-      .label {
-        display: block;
-        font-size: 11px;
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-      .hint {
-        font-size: 10px;
-        color: #666;
-        margin-bottom: 6px;
-      }
-      .input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 12px;
-        box-sizing: border-box;
-        margin-bottom: 8px;
-      }
-      .input:focus {
-        outline: none;
-        border-color: #0066cc;
-      }
-      .button {
-        width: 100%;
-        padding: 10px;
-        background: #0066cc;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: 500;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-      }
-      .button:hover {
-        background: #0056b3;
-      }
-      .button:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-      }
-      .status {
-        padding: 8px;
-        border-radius: 4px;
-        font-size: 11px;
-        margin-bottom: 12px;
-      }
-      .status.success {
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-      }
-      .status.error {
-        background: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-      }
-      .status.info {
-        background: #d1ecf1;
-        color: #0c5460;
-        border: 1px solid #bee5eb;
-      }
-      .status.warning {
-        background: #fff3cd;
-        color: #856404;
-        border: 1px solid #ffeaa7;
-      }
-      .stats {
-        background: #fff3cd;
-        border: 1px solid #ffc107;
-        border-radius: 6px;
-        padding: 12px;
-        margin-bottom: 16px;
-      }
-      .stats-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-      }
-      .stats-title {
-        font-size: 12px;
-        font-weight: 600;
-        color: #856404;
-      }
-      .stats-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 8px;
-        margin-bottom: 8px;
-      }
-      .stat {
-        padding: 6px 8px;
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 4px;
-        text-align: center;
-      }
-      .stat-number {
-        font-size: 14px;
-        font-weight: 600;
-        color: #856404;
-      }
-      .stat-label {
-        font-size: 9px;
-        color: #856404;
-        margin-top: 2px;
-      }
-      .found-items {
-        background: #d4edda;
-        border: 1px solid #c3e6cb;
-        border-radius: 6px;
-        padding: 12px;
-        margin-bottom: 16px;
-      }
-      .found-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-      }
-      .found-title {
-        font-size: 12px;
-        font-weight: 600;
-        color: #155724;
-      }
-      .found-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 6px;
-        padding: 6px;
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 4px;
-      }
-      .found-icon {
-        font-size: 12px;
-      }
-      .found-details {
-        flex: 1;
-      }
-      .found-name {
-        font-size: 11px;
-        font-weight: 600;
-        color: #155724;
-        margin-bottom: 2px;
-      }
-      .found-badges {
-        display: flex;
-        gap: 4px;
-      }
-      .badge {
-        font-size: 9px;
-        padding: 2px 4px;
-        border-radius: 3px;
-        border: 1px solid;
-      }
-      .badge.variable {
-        background: #d4edda;
-        color: #155724;
-        border-color: #c3e6cb;
-      }
-      .badge.style {
-        background: #e2e3ff;
-        color: #3d4ed8;
-        border-color: #c7d2fe;
-      }
-      .badge.layer {
-        background: #fef3c7;
-        color: #92400e;
-        border-color: #fcd34d;
-      }
-      .badge.remote {
-        background: #fff3cd;
-        color: #856404;
-        border-color: #ffeaa7;
-      }
-      .badge.local {
-        background: #f8f9fa;
-        color: #495057;
-        border-color: #dee2e6;
-      }
-      .results {
-        margin-bottom: 16px;
-      }
-      .results-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-      }
-      .results-title {
-        font-size: 12px;
-        font-weight: 600;
-      }
-      .results-count {
-        font-size: 10px;
-        background: #f0f0f0;
-        padding: 2px 6px;
-        border-radius: 10px;
-      }
-      .context {
-        font-size: 10px;
-        color: #666;
-        font-style: italic;
-        margin-bottom: 8px;
-      }
-      .results-list {
-        max-height: 300px;
-        overflow-y: auto;
-        border: 1px solid #eee;
-        border-radius: 6px;
-        background: white;
-      }
-      .result {
-        padding: 12px;
-        border-bottom: 1px solid #f0f0f0;
-        transition: all 0.2s;
-      }
-      .result:last-child {
-        border-bottom: none;
-      }
-      .result:hover {
-        background: #f0f8ff;
-      }
-      .result-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
-      }
-      .result-icon {
-        color: #666;
-      }
-      .result-name {
-        font-size: 12px;
-        font-weight: 500;
-        flex: 1;
-      }
-      .result-badge {
-        font-size: 9px;
-        padding: 2px 4px;
-        background: #f0f0f0;
-        color: #666;
-        border-radius: 3px;
-      }
-      .result-path {
-        font-size: 10px;
-        color: #888;
-        font-family: monospace;
-        margin-bottom: 6px;
-      }
-      .result-found {
-        border-top: 1px solid #f0f0f0;
-        padding-top: 6px;
-        margin-top: 6px;
-      }
-      .result-found-title {
-        font-size: 10px;
-        font-weight: 600;
-        color: #666;
-        margin-bottom: 4px;
-      }
-      .result-found-badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-      }
-      .no-results {
-        text-align: center;
-        padding: 24px;
-        background: white;
-        border: 1px solid #eee;
-        border-radius: 6px;
-      }
-      .no-results-icon {
-        font-size: 24px;
-        margin-bottom: 8px;
-        color: #ccc;
-      }
-      .no-results-title {
-        font-size: 12px;
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-      .no-results-text {
-        font-size: 10px;
-        color: #666;
-        margin-bottom: 12px;
-      }
-      .tips {
-        background: #f8f9fa;
-        padding: 8px;
-        border-radius: 4px;
-        font-size: 10px;
-        color: #666;
-      }
-      .tips-title {
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-      .hidden {
-        display: none;
-      }
-      .spinner {
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
+      html, body {
+        height:100%; margin:0; overflow:auto;
+        font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        background:#fff;
+      }
+
+      .wrap{
+        --panel:#FFFFFF; --panel-border:#E8EAEE; --text:#000; --muted:#6B7280;
+        --accent:#4CAF4F; --accent-ink:#4CAF4F; --accent-50:#ECF4EC;
+        --chip:#FFFFFF; --chip-border:#F0F0F0;
+
+        --success-bg:#E9F6EA; --success-border:#CFEBD2; --success-ink:#1B5E20;
+        --warn-bg:#FFF8DF; --warn-border:#FAE8A8; --warn-ink:#7B5F00;
+        --error-bg:#FFE8EA; --error-border:#F6C3C7; --error-ink:#B00020;
+
+        /* Tips card theme (green with black text & border) */
+        --tips-bg:#F8FCF8;
+        --tips-border:#0000000e;
+        --tips-ink:#000000;
+        --tips-radius:8px;
+
+        min-height:100vh; padding:20px; background:#fff; color:var(--text);
+      }
+      .wrap *{ box-sizing:border-box; }
+
+      .wrap .header{ text-align:center; margin-bottom:18px; }
+      .wrap .title{ font-size:16px; font-weight:600; margin:0 0 4px; }
+      .wrap .subtitle{ font-size:14px; line-height:20px; color:var(--muted); max-width:560px; margin:0 auto; }
+
+      .wrap .tabs{ display:flex; gap:0; padding:6px; border:1px solid #F0F0F0; border-radius:8px; background:#FAFAFA; margin:16px 0; }
+      .wrap .tab{ flex:1; border:0; background:transparent; border-radius:12px; padding:10px 12px; font-size:14px; line-height:20px; font-weight:500; color:#737373; cursor:pointer; transition:all .15s ease; }
+      .wrap .tab.active{ background:#fff; color:#000; border-radius:4px; box-shadow:0 1px 3px rgba(0,0,0,.06), 0 4px 8px 3px rgba(0,0,0,.04); }
+
+      .wrap .card{ background:#FAFAFA; border:1px solid #F0F0F0; border-radius:12px; padding:16px; }
+      .wrap .section-title{ font-size:14px; font-weight:600; margin:0 0 6px; color:#000; }
+      .wrap .section-note{ font-size:14px; line-height: 20px; color:#737373; margin:0 0 12px; }
+
+      .wrap .quick-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+      .wrap .chip{ background:var(--chip); border:1px solid var(--chip-border); border-radius:8px; padding:14px 16px; text-align:center; cursor:pointer; font-weight:500; font-size:14px; color:#000000; transition:all .15s ease; }
+      .wrap .chip:hover{ background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.06), 0 4px 8px 3px rgba(0,0,0,.04); }
+      .wrap .chip.selected{ background:var(--accent-50); border-color:var(--accent); color:var(--accent-ink); }
+
+      .wrap .label{ display:block; font-weight:600; margin:12px 0 6px; font-size:14px; }
+      .wrap .hint{ color:#757575; font-size:14px; line-height: 20px; margin:0 0 8px; }
+      .wrap .input{ width:100%; border:1px solid #E6E6E6; border-radius:8px; padding:10px 12px; font-size:14px; outline:none; background:#fff; }
+      .wrap .input:focus{ border-color:#4CAF4F; }
+
+      .wrap .btn{ width:100%; margin-top:14px; padding:12px 14px; border:0; border-radius:8px; background:var(--accent); color:#fff; font-weight:600; font-size:14px; cursor:pointer; }
+      .wrap .btn:hover{ box-shadow:0 1px 3px rgba(0,0,0,.06), 0 4px 8px 3px rgba(0,0,0,.04); }
+
+      .wrap .status{
+        font-size:14px; margin-top:12px; border-radius:8px; padding:12px; display:flex; align-items:flex-start; gap:8px;
+        border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn-ink); font-weight:400;
+      }
+      .wrap .status.success{ background:var(--success-bg); border-color:var(--success-border); color:var(--success-ink); }
+      .wrap .status.warning{ background:var(--warn-bg); border-color:var(--warn-border); color:var(--warn-ink); }
+      .wrap .status.error{ background:var(--error-bg); border-color:var(--error-border); color:var(--error-ink); }
+      .wrap .status .badge{ width:14px; height:14px; display:grid; place-items:center; border-radius:50%; font-size:14px; line-height:1; margin-top:1px; background:#4CAF4F; color:#fff; }
+      .wrap .status.success .badge{ background:#1B5E20; }
+      .wrap .status.warning .badge{ background:#7B5F00; }
+      .wrap .status.error .badge{ background:#B00020; }
+
+      .wrap .stats{ margin-top:14px; }
+      .wrap .stats-card{ background:#fff; border:1px solid var(--panel-border); border-radius:8px; padding:16px; }
+      .wrap .stats-title{ font-size:14px; font-weight:600; margin:0 0 4px; }
+      .wrap .stats-context{ color:#757575; font-size:14px; margin-bottom:12px; }
+      .wrap .kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+      .wrap .kpi{ background:#FAFAFA; border-radius:8px; padding:16px; text-align:center; }
+      .wrap .kpi .num{ font-size:20px; font-weight:600; color:#000; }
+      .wrap .kpi .sub{ font-size:12px; color:#737373; margin-top:6px; }
+
+      .wrap .results-title{ font-size:14px; font-weight:600; margin:16px 0 8px; }
+      .wrap .results-list{ display:grid; gap:12px; }
+      .wrap .result{ border:1px solid var(--panel-border); border-radius:8px; background:#fff; padding:16px; cursor:pointer; }
+      .wrap .result:hover{ box-shadow:0 1px 3px rgba(0,0,0,.06), 0 4px 8px 3px rgba(0,0,0,.04); }
+      .wrap .result:focus{ outline:2px solid #4CAF4F; outline-offset:2px; }
+      .wrap .result .name{ font-size:14px; font-weight:600; margin-bottom:6px; }
+      .wrap .result .path{ font-size:14px; line-height:24px; color:#757575; word-break:break-word; }
+
+      .wrap .hidden{ display:none !important; }
+
+      /* Tips card */
+      .tips{
+        background:var(--tips-bg);
+        border:1px solid var(--tips-border);
+        border-radius:var(--tips-radius);
+        color:var(--tips-ink);
+        padding:16px 16px;
+        margin-top:16px;
+      }
+      .tips-title{ font-size: 14px; font-weight:600; color: #727472; margin:0 0 6px; }
+      .tips-list{ margin:0; padding-left:1.2em; list-style:disc; }
+      .tips-list li{ font-size: 14px; font-weight: 400; color: #727472; margin:6px 0; }
     </style>
   </head>
   <body>
-    <div class="banner">
-      <div class="banner-title">🔍 JustGo Audit - Design System Audit Tool</div>
-      <div class="banner-text">
-        Comprehensive design system audit for variables, styles, and layer name
-        matching
+    <div class="wrap">
+      <div class="header">
+        <h1 class="title">JustGo Audit</h1>
+        <p class="subtitle">Design System Audit Solution for detecting variables, styles, and exact layer names, complete with quality assurance features.</p>
       </div>
-    </div>
 
-    <div class="header">
-      <div class="title">🔍 JustGo Audit</div>
-      <div class="subtitle">
-        Design system audit tool for finding layers using variables, styles, and
-        strict layer name matching with quality assurance features.
+      <div class="tabs">
+        <button id="variables-tab" class="tab active">Variable & Styles</button>
+        <button id="layers-tab" class="tab">Layer Names</button>
       </div>
-    </div>
 
-    <div class="tabs">
-      <button id="variables-tab" class="tab active">
-        🔗 Variables & Styles
-      </button>
-      <button id="layers-tab" class="tab">🏷️ Layer Names</button>
-    </div>
+      <!-- Layer Names -->
+      <div id="layers-mode" class="hidden">
+        <div class="section-title">Select layer name</div>
+        <div class="section-note">You can only search within that list. Click to select a suggested text layer name for auditing.</div>
+        <div id="quick-buttons" class="quick-grid card" aria-label="Suggested names">
+          <div class="chip" data-layer="heading-text" role="button" aria-selected="false">heading-text</div>
+          <div class="chip" data-layer="title-text" role="button" aria-selected="false">title-text</div>
+          <div class="chip" data-layer="subtitle-text" role="button" aria-selected="false">subtitle-text</div>
+          <div class="chip" data-layer="body-text" role="button" aria-selected="false">body-text</div>
+          <div class="chip" data-layer="highlighted-text" role="button" aria-selected="false">highlighted-text</div>
+          <div class="chip" data-layer="info-text" role="button" aria-selected="false">info-text</div>
+          <div class="chip" data-layer="caption-text" role="button" aria-selected="false">caption-text</div>
+          <div class="chip" data-layer="overline-text" role="button" aria-selected="false">overline-text</div>
+        </div>
+      </div>
 
-    <div id="variables-mode">
-      <div class="info-card">
-        <div class="info-header">
-          <div class="info-title">🚀 Design System Audit:</div>
-          <div style="display: flex; gap: 4px">
-            <div class="badge local">🏠 Local</div>
-            <div class="badge remote">🌐 Remote</div>
+      <!-- Variables & Styles -->
+      <div id="variables-mode">
+        <label id="search-label" class="label">Enter variable or style name (exact match)</label>
+        <div id="search-hint" class="hint">Type the full name (e.g. <code>colors/warning/100</code>) or the base name exactly (e.g. <code>warning/100</code>).</div>
+        <input id="search-input" class="input" type="text" placeholder="e.g. colors/warning/100"/>
+      </div>
+
+      <button id="search-button" class="btn"><span id="search-text">Find</span></button>
+
+      <div id="status" class="status hidden" role="status" aria-live="polite">
+        <div class="badge">✓</div>
+        <div id="status-text"></div>
+      </div>
+
+      <div id="search-stats" class="stats hidden">
+        <div class="stats-card">
+          <div class="stats-title">Audit Statistics</div>
+          <div id="stats-context" class="stats-context"></div>
+          <div class="kpis">
+            <div class="kpi"><div id="stat-checked" class="num">0</div><div class="sub">Nodes<br/>Audited</div></div>
+            <div class="kpi"><div id="stat-with-items" class="num">0</div><div class="sub">Design<br/>Tokens</div></div>
+            <div class="kpi"><div id="stat-matching" class="num">0</div><div class="sub">Matching<br/>Criteria</div></div>
           </div>
-        </div>
-        <div class="info-grid">
-          <div>
-            <div style="font-weight: 600; margin-bottom: 4px; color: #0066cc">
-              Variables:
-            </div>
-            <div class="info-item"><span>🎨</span><span>Colors</span></div>
-            <div class="info-item"><span>📏</span><span>Numbers</span></div>
-            <div class="info-item"><span>📝</span><span>Strings</span></div>
-            <div class="info-item"><span>✅</span><span>Booleans</span></div>
-          </div>
-          <div>
-            <div style="font-weight: 600; margin-bottom: 4px; color: #6f42c1">
-              Styles:
-            </div>
-            <div class="info-item"><span>🎨</span><span>Paint</span></div>
-            <div class="info-item"><span>📝</span><span>Text</span></div>
-            <div class="info-item"><span>✨</span><span>Effect</span></div>
-            <div class="info-item"><span>📐</span><span>Grid</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div id="layers-mode" class="hidden">
-      <div class="info-card">
-        <div class="info-header">
-          <div class="info-title">🔒 STRICT Layer Name Audit:</div>
-          <div class="badge layer">🚫 Components Excluded</div>
-        </div>
-        <div style="font-size: 10px; color: #666; margin-bottom: 8px">
-          Audit layers by exact name within selected frames or entire page.
-          Components and instances automatically excluded.
-        </div>
-        <div class="quick-buttons">
-          <div class="quick-button" data-layer="heading-text">heading-text</div>
-          <div class="quick-button" data-layer="title-text">title-text</div>
-          <div class="quick-button" data-layer="subtitle-text">
-            subtitle-text
-          </div>
-          <div class="quick-button" data-layer="body-text">body-text</div>
-          <div class="quick-button" data-layer="highlighted-text">
-            highlighted-text
-          </div>
-          <div class="quick-button" data-layer="info-text">info-text</div>
-          <div class="quick-button" data-layer="caption-text">caption-text</div>
-          <div class="quick-button" data-layer="overline-text">
-            overline-text
-          </div>
+          <!-- Hidden by default; only shown when there are results -->
+          <div id="results-title" class="results-title hidden">Audit Results</div>
+          <div id="results-container"></div>
         </div>
       </div>
-    </div>
-
-    <div class="input-section">
-      <label class="label" for="search-input" id="search-label"
-        >Enter variable or style name:</label
-      >
-      <div class="hint" id="search-hint">
-        Try: "Colors/warning/100", "button-primary", "heading-large", etc.
-      </div>
-      <input
-        type="text"
-        id="search-input"
-        class="input"
-        placeholder="Colors/warning/100"
-      />
-      <button id="search-button" class="button">
-        <span id="search-icon">🔍</span>
-        <span id="search-text">Start Audit</span>
-      </button>
-    </div>
-
-    <div id="status" class="status hidden"></div>
-
-    <div id="search-stats" class="stats hidden">
-      <div class="stats-header">
-        <div style="font-size: 16px">📊</div>
-        <div id="stats-title" class="stats-title"></div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat">
-          <div id="stat-checked" class="stat-number">0</div>
-          <div class="stat-label">Nodes<br />Audited</div>
-        </div>
-        <div class="stat">
-          <div id="stat-with-items" class="stat-number">0</div>
-          <div class="stat-label">With<br />Design Tokens</div>
-        </div>
-        <div class="stat">
-          <div id="stat-matching" class="stat-number">0</div>
-          <div class="stat-label">Matching<br />Criteria</div>
-        </div>
-      </div>
-    </div>
-
-    <div id="found-items" class="found-items hidden">
-      <div class="found-header">
-        <div style="font-size: 16px">🎯</div>
-        <div id="found-title" class="found-title"></div>
-      </div>
-      <div id="found-list"></div>
-    </div>
-
-    <div id="results-section" class="results hidden">
-      <div class="results-header">
-        <div class="results-title">Audit Results:</div>
-        <div id="results-count" class="results-count">0 found</div>
-      </div>
-      <div id="context" class="context"></div>
-      <div id="results-container"></div>
     </div>
 
     <script>
-      const elements = {
+      const el = {
         input: document.getElementById("search-input"),
         button: document.getElementById("search-button"),
-        icon: document.getElementById("search-icon"),
         text: document.getElementById("search-text"),
-        label: document.getElementById("search-label"),
-        hint: document.getElementById("search-hint"),
         status: document.getElementById("status"),
+        statusText: document.getElementById("status-text"),
         variablesTab: document.getElementById("variables-tab"),
         layersTab: document.getElementById("layers-tab"),
         variablesMode: document.getElementById("variables-mode"),
         layersMode: document.getElementById("layers-mode"),
-        quickButtons: document.querySelectorAll(".quick-button"),
+        quickButtons: document.getElementById("quick-buttons"),
         stats: document.getElementById("search-stats"),
-        statsTitle: document.getElementById("stats-title"),
+        statsContext: document.getElementById("stats-context"),
         statChecked: document.getElementById("stat-checked"),
         statWithItems: document.getElementById("stat-with-items"),
         statMatching: document.getElementById("stat-matching"),
-        foundItems: document.getElementById("found-items"),
-        foundTitle: document.getElementById("found-title"),
-        foundList: document.getElementById("found-list"),
-        results: document.getElementById("results-section"),
-        resultsCount: document.getElementById("results-count"),
-        context: document.getElementById("context"),
-        container: document.getElementById("results-container"),
+        resultsTitle: document.getElementById("results-title"),
+        container: document.getElementById("results-container")
       };
 
-      let isSearching = false;
       let currentMode = "variables";
 
-      function showStatus(message, type = "info") {
-        elements.status.textContent = message;
-        elements.status.className = "status " + type;
-        elements.status.classList.remove("hidden");
+      function setStatus(message, type){
+        el.statusText.textContent = message;
+        el.status.className = "status " + (type || "");
+        el.status.classList.remove("hidden");
+        const badge = el.status.querySelector(".badge");
+        if (type === "success") badge.textContent = "✓";
+        else if (type === "warning") badge.textContent = "!";
+        else if (type === "error") badge.textContent = "×";
+        else badge.textContent = "•";
+      }
+      function hideStatus(){ el.status.classList.add("hidden"); }
+      function setSearching(s){
+        el.button.disabled = s;
+        el.text.textContent = s ? (currentMode === "variables" ? "Auditing design tokens..." : "Auditing layer names...") : "Find";
       }
 
-      function hideStatus() {
-        elements.status.classList.add("hidden");
-      }
-
-      function setSearching(searching) {
-        isSearching = searching;
-        elements.button.disabled = searching;
-        if (searching) {
-          elements.icon.textContent = "⏳";
-          elements.icon.classList.add("spinner");
-          elements.text.textContent =
-            currentMode === "variables"
-              ? "Auditing design tokens..."
-              : "Auditing layer names...";
-        } else {
-          elements.icon.textContent = "🔍";
-          elements.icon.classList.remove("spinner");
-          elements.text.textContent = "Start Audit";
-        }
-      }
-
-      function switchMode(mode) {
+      function switchMode(mode){
         currentMode = mode;
-        elements.variablesTab.classList.toggle("active", mode === "variables");
-        elements.layersTab.classList.toggle("active", mode === "layers");
-        elements.variablesMode.classList.toggle("hidden", mode !== "variables");
-        elements.layersMode.classList.toggle("hidden", mode !== "layers");
+        el.variablesTab.classList.toggle("active", mode === "variables");
+        el.layersTab.classList.toggle("active", mode === "layers");
+        el.variablesMode.classList.toggle("hidden", mode !== "variables");
+        el.layersMode.classList.toggle("hidden", mode !== "layers");
 
-        if (mode === "variables") {
-          elements.label.textContent = "Enter variable or style name:";
-          elements.hint.textContent =
-            'Try: "Colors/warning/100", "button-primary", etc.';
-          elements.input.placeholder = "Colors/warning/100";
-        } else {
-          elements.label.textContent = "Enter exact layer name:";
-          elements.hint.textContent =
-            "Only allowed: heading-text, title-text, subtitle-text, body-text, etc.";
-          elements.input.placeholder = "heading-text";
-        }
-
-        hideStatus();
-        elements.foundItems.classList.add("hidden");
-        elements.results.classList.add("hidden");
-        elements.stats.classList.add("hidden");
-        elements.quickButtons.forEach((btn) =>
-          btn.classList.remove("selected"),
-        );
-      }
-
-      function displayStats(stats, scopeInfo) {
-        if (!stats) {
-          elements.stats.classList.add("hidden");
-          return;
-        }
-
-        let title = "Audit Statistics:";
-        if (
-          currentMode === "variables" &&
-          scopeInfo &&
-          scopeInfo.expandedToPage
-        ) {
-          title = scopeInfo.searchedSelection
-            ? "🧠 Smart Audit: Selection → Page"
-            : "🧠 Smart Audit: Page scope";
-        } else if (currentMode === "layers") {
-          title = "🔒 Strict Layer Audit:";
-        }
-
-        elements.statsTitle.textContent = title;
-        elements.statChecked.textContent = stats.checkedNodes;
-        elements.statWithItems.textContent = stats.nodesWithItems;
-        elements.statMatching.textContent = stats.matchingNodes;
-        elements.stats.classList.remove("hidden");
-      }
-
-      function getIcons() {
-        return {
-          variable: { COLOR: "🎨", FLOAT: "📏", STRING: "📝", BOOLEAN: "✅" },
-          style: { PAINT: "🎨", TEXT: "📝", EFFECT: "✨", GRID: "📐" },
-          layer: {
-            RECTANGLE: "⬜",
-            GROUP: "📁",
-            VECTOR: "🔺",
-            COMPONENT: "🧩",
-            TEXT: "📝",
-            FRAME: "🖼️",
-            ELLIPSE: "⭕",
-          },
-        };
-      }
-
-      function displayFoundItems(items) {
-        if (!items || items.length === 0 || currentMode === "layers") {
-          elements.foundItems.classList.add("hidden");
-          return;
-        }
-
-        const icons = getIcons();
-        elements.foundTitle.textContent = `Found ${items.length} matching design tokens:`;
-        elements.foundList.innerHTML = "";
-
-        items.forEach((item) => {
-          const itemEl = document.createElement("div");
-          itemEl.className = "found-item";
-          const icon =
-            item.type === "VARIABLE"
-              ? icons.variable[item.resolvedType] || "🔧"
-              : icons.style[item.styleType] || "🔧";
-          const badges = [
-            `<span class="badge ${item.type.toLowerCase()}">${
-              item.type === "VARIABLE" ? "🔗 Variable" : "🎨 Style"
-            }</span>`,
-            `<span class="badge">${
-              item.type === "VARIABLE" ? item.resolvedType : item.styleType
-            }</span>`,
-            `<span class="badge ${item.isRemote ? "remote" : "local"}">${
-              item.isRemote ? "🌐 Remote" : "🏠 Local"
-            }</span>`,
-          ];
-
-          itemEl.innerHTML = `
-                    <div class="found-icon">${icon}</div>
-                    <div class="found-details">
-                        <div class="found-name">${item.name}</div>
-                        <div class="found-badges">${badges.join("")}</div>
-                    </div>
-                `;
-          elements.foundList.appendChild(itemEl);
-        });
-        elements.foundItems.classList.remove("hidden");
-      }
-
-      function displayResults(results, searchTerm, searchContext, searchType) {
-        elements.resultsCount.textContent = `${results.length} found`;
-        elements.context.textContent = `Audited scope: ${searchContext}`;
-
-        if (results.length === 0) {
-          const tips =
-            searchType === "LAYER_NAME"
-              ? '<div class="tips-title">🔒 Strict Layer Audit Tips:</div><div>• Only exact layer name matching</div><div>• Components & instances excluded</div><div>• Use allowed names only</div>'
-              : '<div class="tips-title">🔍 Design System Audit Tips:</div><div>• Comprehensive variables & styles detection</div><div>• Smart scope with automatic expansion</div><div>• Try different design token names</div>';
-
-          elements.container.innerHTML = `
-                    <div class="no-results">
-                        <div class="no-results-icon">🔍</div>
-                        <div class="no-results-title">No layers found</div>
-                        <div class="no-results-text">No layers found ${
-                          searchType === "LAYER_NAME" ? "with name" : "using"
-                        } "${searchTerm}"</div>
-                        <div class="tips">${tips}</div>
-                    </div>
-                `;
-        } else {
-          const icons = getIcons();
-          const resultsList = document.createElement("div");
-          resultsList.className = "results-list";
-
-          results.forEach((result) => {
-            const resultEl = document.createElement("div");
-            resultEl.className = "result";
-
-            let foundItemsHtml = "";
-            if (
-              result.foundItems &&
-              result.foundItems.length > 0 &&
-              searchType !== "LAYER_NAME"
-            ) {
-              const badges = result.foundItems
-                .map((item) => {
-                  const icon =
-                    item.type === "VARIABLE"
-                      ? icons.variable[item.resolvedType] || "🔧"
-                      : icons.style[item.styleType] || "🔧";
-                  return `<span class="badge ${item.type.toLowerCase()}">${icon} ${
-                    item.name
-                  }</span>`;
-                })
-                .join("");
-              foundItemsHtml = `<div class="result-found"><div class="result-found-title">Design Tokens Found:</div><div class="result-found-badges">${badges}</div></div>`;
-            } else if (searchType === "LAYER_NAME") {
-              foundItemsHtml = `<div class="result-found"><div class="result-found-title">Audit Match:</div><div class="result-found-badges"><span class="badge layer">🏷️ Exact Layer Name</span><span class="badge">🔒 STRICT</span></div></div>`;
-            }
-
-            resultEl.innerHTML = `
-                        <div class="result-header">
-                            <div class="result-icon">${
-                              icons.layer[result.type] || "⬜"
-                            }</div>
-                            <div class="result-name">${result.name}</div>
-                            <div class="result-badge">${result.type}</div>
-                        </div>
-                        <div class="result-path">${result.path}</div>
-                        ${foundItemsHtml}
-                    `;
-            resultsList.appendChild(resultEl);
+        if (el.quickButtons){
+          Array.prototype.forEach.call(el.quickButtons.children, (btn)=>{
+            btn.classList.remove("selected"); btn.setAttribute("aria-selected","false");
           });
-
-          elements.container.innerHTML = "";
-          elements.container.appendChild(resultsList);
         }
-        elements.results.classList.remove("hidden");
-      }
+        el.input.value = "";
 
-      function handleSearch() {
-        const searchTerm = elements.input.value.trim();
-        if (!searchTerm) {
-          showStatus("Please enter a search term", "error");
-          return;
-        }
-
-        setSearching(true);
         hideStatus();
-        elements.foundItems.classList.add("hidden");
-        elements.results.classList.add("hidden");
-
-        const messageType =
-          currentMode === "variables"
-            ? "find-variables-and-styles"
-            : "find-layer-names";
-        parent.postMessage(
-          { pluginMessage: { type: messageType, searchTerm } },
-          "*",
-        );
+        el.stats.classList.add("hidden");
+        el.container.innerHTML = "";
+        el.resultsTitle.classList.add("hidden"); // hide heading on mode switch
       }
 
-      // Event listeners
-      elements.button.addEventListener("click", handleSearch);
-      elements.input.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") handleSearch();
-      });
-      elements.variablesTab.addEventListener("click", () =>
-        switchMode("variables"),
-      );
-      elements.layersTab.addEventListener("click", () => switchMode("layers"));
+      function renderStats(stats, context){
+        el.statsContext.textContent = context ? ("Page: " + context) : "";
+        el.statChecked.textContent = stats.checkedNodes;
+        el.statWithItems.textContent = stats.nodesWithItems;
+        el.statMatching.textContent = stats.matchingNodes;
+        el.stats.classList.remove("hidden");
+      }
 
-      elements.quickButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-          elements.input.value = this.dataset.layer;
-          elements.quickButtons.forEach((btn) =>
-            btn.classList.remove("selected"),
-          );
-          this.classList.add("selected");
-        });
-      });
+      function renderEmpty(term, type){
+        const html = type === "LAYER_NAME"
+          ? `<div class="tips">
+               <div class="tips-title">💡 Tips:</div>
+               <ul class="tips-list">
+                 <li>Only exact layer name matching</li>
+                 <li>Components &amp; instances excluded</li>
+                 <li>Use allowed names only</li>
+               </ul>
+             </div>`
+          : `<div class="tips">
+               <div class="tips-title">💡 Tips:</div>
+               <ul class="tips-list">
+                 <li>Exact match only (full name or base segment)</li>
+                 <li>Searches selection first, then page</li>
+                 <li>Matches Variables &amp; Styles</li>
+               </ul>
+             </div>`;
+        el.container.innerHTML = html;
+        el.resultsTitle.classList.add("hidden"); // keep "Audit Results" hidden when empty
+      }
 
-      // Handle messages from plugin
-      window.onmessage = function (event) {
-        const msg = event.data.pluginMessage;
-        if (!msg) return;
-
-        switch (msg.type) {
-          case "search-results":
-            setSearching(false);
-            if (msg.searchStatistics)
-              displayStats(msg.searchStatistics, msg.scopeInfo);
-
-            if (msg.searchType === "LAYER_NAME") {
-              if (msg.strictError) {
-                showStatus(`🔒 ${msg.strictError}`, "error");
-              } else if (msg.results.length > 0) {
-                showStatus(
-                  `✅ Audit found ${msg.results.length} layers named "${msg.searchTerm}"`,
-                  "success",
-                );
-              } else {
-                showStatus(
-                  `⚠️ Audit found no layers named "${msg.searchTerm}"`,
-                  "warning",
-                );
-              }
-            } else {
-              if (msg.scopeInfo && msg.scopeInfo.expandedToPage) {
-                const reason = !msg.scopeInfo.selectionHadVariables
-                  ? "no design tokens in selection"
-                  : "no matches in selection";
-                if (msg.results.length > 0) {
-                  showStatus(
-                    `🧠 Smart audit expanded to page - found ${msg.results.length} layers`,
-                    "success",
-                  );
-                } else {
-                  showStatus(
-                    `🧠 Expanded to page (${reason}) but no matches found`,
-                    "warning",
-                  );
-                }
-              } else if (msg.results.length > 0) {
-                showStatus(
-                  `✅ Audit found ${msg.results.length} layers using "${msg.searchTerm}"`,
-                  "success",
-                );
-              }
-            }
-
-            if (msg.foundItems && msg.foundItems.length > 0)
-              displayFoundItems(msg.foundItems);
-            displayResults(
-              msg.results,
-              msg.searchTerm,
-              msg.context,
-              msg.searchType,
-            );
-            break;
-
-          case "error":
-            setSearching(false);
-            showStatus(msg.message, "error");
-            break;
+      function renderResults(results){
+        el.resultsTitle.classList.remove("hidden"); // show heading only when we have results
+        const list = document.createElement("div");
+        list.className = "results-list";
+        const frag = document.createDocumentFragment();
+        for (let i=0;i<results.length;i++){
+          const r = results[i];
+          const card = document.createElement("div");
+          card.className = "result";
+          card.setAttribute("data-id", r.id);
+          card.setAttribute("role", "button"); // accessibility + keyboard
+          card.tabIndex = 0;
+          card.innerHTML = `
+            <div class="name">${r.name}</div>
+            <div class="path">${(r.path||"").split("→").join(" → ")}</div>`;
+          frag.appendChild(card);
         }
-      };
+        list.appendChild(frag);
+        el.container.innerHTML = "";
+        el.container.appendChild(list);
+      }
+
+      /* Events & bridge */
+      el.button.addEventListener("click", ()=>{
+        const term = (el.input.value || "").trim();
+        if (currentMode === "layers" && !term){ setStatus("Please select a layer name first.", "warning"); return; }
+        if (currentMode === "variables" && !term){ setStatus("Please enter a variable or style name.", "warning"); return; }
+        setSearching(true); hideStatus();
+        const type = currentMode === "variables" ? "find-variables-and-styles" : "find-layer-names";
+        parent.postMessage({ pluginMessage: { type, searchTerm: term } }, "*");
+      });
+
+      // Enter submits in BOTH modes
+      el.input.addEventListener("keypress",(e)=>{ if (e.key==="Enter") el.button.click(); });
+
+      el.variablesTab.addEventListener("click", ()=> switchMode("variables"));
+      el.layersTab.addEventListener("click",    ()=> switchMode("layers"));
+
+      if (el.quickButtons){
+        el.quickButtons.addEventListener("click", (ev)=>{
+          const btn = ev.target.closest(".chip"); if (!btn) return;
+          Array.prototype.forEach.call(el.quickButtons.children,(c)=>{ c.classList.remove("selected"); c.setAttribute("aria-selected","false"); });
+          btn.classList.add("selected"); btn.setAttribute("aria-selected","true");
+          el.input.value = btn.dataset.layer; // still need to click Find
+        });
+      }
+
+      // Click result card -> select & zoom in editor
+      el.container.addEventListener("click", (e)=>{
+        const card = e.target.closest(".result"); if (!card) return;
+        const id = card.getAttribute("data-id");  if (!id) return;
+        parent.postMessage({ pluginMessage: { type: "select-node", id } }, "*");
+      });
+
+      // Keyboard: Enter / Space on focused card
+      el.container.addEventListener("keydown", (e)=>{
+        if (e.key !== "Enter" && e.key !== " ") return;
+        const card = e.target.closest(".result"); if (!card) return;
+        const id = card.getAttribute("data-id");  if (!id) return;
+        e.preventDefault();
+        parent.postMessage({ pluginMessage: { type: "select-node", id } }, "*");
+      });
+
+      // Messages from plugin
+      window.addEventListener("message",(event)=>{
+        const msg = event.data && event.data.pluginMessage; if (!msg) return;
+
+        if (msg.type === "search-results"){
+          setSearching(false);
+          if (msg.searchStatistics) renderStats(msg.searchStatistics, msg.context);
+
+          if (msg.searchType === "LAYER_NAME"){
+            if (msg.strictError) setStatus("🔒 " + msg.strictError, "error");
+            else if (msg.results.length) setStatus(`${msg.results.length} layers named "${msg.searchTerm}" found.`, "success");
+            else setStatus(`No layers named "${msg.searchTerm}" found.`, "warning");
+          } else {
+            if (msg.results.length) setStatus(`Audit found ${msg.results.length} layers using "${msg.searchTerm}".`, "success");
+            else setStatus(`No layers found using "${msg.searchTerm}".`, "warning");
+          }
+
+          if (!msg.results.length) renderEmpty(msg.searchTerm, msg.searchType);
+          else renderResults(msg.results);
+
+        } else if (msg.type === "select-node:ok"){
+          if (msg.exact) setStatus("Layer selected.", "success");
+          else if (msg.reason === "inside-instance-child") setStatus("Selected the owning Instance (children inside instances can’t be selected).", "warning");
+          else if (msg.reason === "locked-or-hidden") setStatus("Selected the nearest visible & unlocked parent (target is locked/hidden).", "warning");
+          else setStatus("Selected parent container.", "warning");
+
+        } else if (msg.type === "select-node:blocked"){
+          const b = msg.blocker ? ` — blocked by ${msg.blocker.type} “${msg.blocker.name || "Unnamed"}”` : "";
+          const bits = [];
+          if (msg.insideInstance) bits.push("inside an Instance");
+          if (msg.locked) bits.push("locked");
+          if (msg.hidden) bits.push("hidden");
+          const why = bits.length ? ` (${bits.join(", ")})` : "";
+          setStatus(`Can’t select that exact layer${why}${b}. Figma prevents selecting it without changing layer state.`, "error");
+
+        } else if (msg.type === "select-node:fail"){
+          const reason = msg.reason ? ` (${msg.reason}${msg.detail ? ": " + msg.detail : ""})` : "";
+          setStatus(`Couldn’t select that layer${reason}.`, "error");
+
+        } else if (msg.type === "error"){
+          setSearching(false);
+          setStatus(msg.message || "Something went wrong.", "error");
+        }
+      });
+
+      // Default view → Variables & Styles tab active
+      switchMode("variables");
     </script>
   </body>
 </html>
