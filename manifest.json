@@ -6,12 +6,6 @@
   "ui": "ui.html",
   "editorType": ["figma"],
   "parameterOnly": false,
-  "menu": [
-    {
-      "name": "Open JustGo Audit",
-      "command": "open-audit"
-    }
-  ],
   "capabilities": [],
   "documentAccess": "dynamic-page"
 }
