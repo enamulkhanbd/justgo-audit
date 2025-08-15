@@ -67,7 +67,7 @@ function chainState(n){
   var cur=n, blockedBy=null, hidden=false, locked=false;
   while (cur && cur.type!=='PAGE'){
     if ('visible' in cur && cur.visible===false){ hidden=true; if (!blockedBy) blockedBy=cur; }
-    if ('locked' in cur && cur.locked===true){ locked=true; if (!blockedBy) blockedBy=cur; }
+    if ('locked' in cur && cur.locked===true){ locked=true; if (!blockedBy)blockedBy=cur; }
     cur=cur.parent;
   }
   return { hidden:hidden, locked:locked, blocker:blockedBy };
@@ -87,16 +87,29 @@ function trySelect(node){
   try{
     figma.currentPage.selection = [node];
     if (figma.currentPage.selection.length && figma.currentPage.selection[0].id === node.id){
-      try { figma.viewport.scrollAndZoomIntoView([node]); } catch(e){} // don't let viewport issues kill success
+      try { figma.viewport.scrollAndZoomIntoView([node]); } catch(e){}
       return true;
     }
   }catch(e){}
   return false;
 }
 
-/* -------- strict layer-name search -------- */
+/* ---------------- exact-name helpers ---------------- */
+function toKey(s){ return (s||'').toLowerCase().trim(); }
+function baseSeg(s){ return toKey(s).split('/').pop(); }
+// true if ANY of the (full/base) equalities match, case-insensitive, no partials
+function exactNameMatch(left, right){
+  var ln = toKey(left), rn = toKey(right);
+  if (!ln || !rn) return false;
+  if (ln === rn) return true;
+  if (baseSeg(left) === rn) return true;
+  if (ln === baseSeg(right)) return true;
+  return baseSeg(left) === baseSeg(right);
+}
+
+/* -------- strict layer-name search (already exact-only) -------- */
 function searchLayersByName(searchTerm, scopeNodes){
-  var results=[], searchLower=searchTerm.toLowerCase().trim();
+  var results=[], searchLower=toKey(searchTerm);
   var stats={checkedNodes:0, matchingNodes:0, excludedNodes:0};
 
   if (ALLOWED_LAYER_NAMES.indexOf(searchLower)===-1){
@@ -107,7 +120,7 @@ function searchLayersByName(searchTerm, scopeNodes){
   for (var i=0;i<scopeNodes.length;i++){
     var node=scopeNodes[i]; stats.checkedNodes++;
     if (EXCLUDED_NODE_TYPES.indexOf(node.type)!==-1){ stats.excludedNodes++; continue; }
-    var nodeName=(node.name||'').toLowerCase().trim();
+    var nodeName=toKey(node.name||'');
     if (nodeName===searchLower){
       stats.matchingNodes++;
       cacheNode(node);
@@ -134,35 +147,31 @@ function performLayerNameSearch(term){
   };
 }
 
-/* ------------- variables & styles ------------- */
+/* ------------- variables & styles (NOW exact-only) ------------- */
 async function safeGetVariable(id){ try{ return await figma.variables.getVariableByIdAsync(id); }catch(e){ try{ return figma.variables.getVariableById(id);}catch(e2){return null;} } }
 async function safeGetVariableCollection(id){ try{ return await figma.variables.getVariableCollectionByIdAsync(id);}catch(e){ try{ return figma.variables.getVariableCollectionById(id);}catch(e2){return null;} } }
 async function safeGetStyle(id){ try{ if (!id || id===figma.mixed) return null; return await figma.getStyleByIdAsync(id);}catch(e){ return null; } }
-function styleMatches(styleName, searchTerm){
-  if (!styleName || !searchTerm) return false;
-  var n=styleName.toLowerCase().trim(), q=searchTerm.toLowerCase().trim();
-  if (n===q || n.indexOf(q)!==-1 || q.indexOf(n)!==-1) return true;
-  var nBase=n.split('/').pop(), qBase=q.split('/').pop();
-  if (nBase===qBase || nBase.indexOf(qBase)!==-1 || qBase.indexOf(nBase)!==-1) return true;
-  var qWords=q.replace(/[\/\-_]/g,' ').split(' ').filter(function(w){return w.length>1;});
-  var nWords=n.replace(/[\/\-_]/g,' ').split(' ').filter(function(w){return w.length>1;});
-  for (var i=0;i<qWords.length;i++) for (var j=0;j<nWords.length;j++){
-    if (qWords[i]===nWords[j] || qWords[i].indexOf(nWords[j])!==-1 || nWords[j].indexOf(qWords[i])!==-1) return true;
-  }
-  return false;
+
+// exact-only for style names
+function styleMatchesStrict(styleName, searchTerm){
+  return exactNameMatch(styleName, searchTerm);
 }
+
 async function checkNodeStyles(node, q){
   var items=[], matched=false, s;
-  if ('fillStyleId' in node){ s=await safeGetStyle(node.fillStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'PAINT',property:'fill',isRemote:!!s.remote}); if (styleMatches(s.name,q)) matched=true; } }
-  if ('strokeStyleId' in node){ s=await safeGetStyle(node.strokeStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'PAINT',property:'stroke',isRemote:!!s.remote}); if (styleMatches(s.name,q)) matched=true; } }
-  if (node.type==='TEXT' && 'textStyleId' in node){ s=await safeGetStyle(node.textStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'TEXT',property:'text',isRemote:!!s.remote}); if (styleMatches(s.name,q)) matched=true; } }
-  if ('effectStyleId' in node){ s=await safeGetStyle(node.effectStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'EFFECT',property:'effect',isRemote:!!s.remote}); if (styleMatches(s.name,q)) matched=true; } }
-  if ('gridStyleId' in node){ s=await safeGetStyle(node.gridStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'GRID',property:'grid',isRemote:!!s.remote}); if (styleMatches(s.name,q)) matched=true; } }
+  if ('fillStyleId' in node){ s=await safeGetStyle(node.fillStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'PAINT',property:'fill',isRemote:!!s.remote}); if (styleMatchesStrict(s.name,q)) matched=true; } }
+  if ('strokeStyleId' in node){ s=await safeGetStyle(node.strokeStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'PAINT',property:'stroke',isRemote:!!s.remote}); if (styleMatchesStrict(s.name,q)) matched=true; } }
+  if (node.type==='TEXT' && 'textStyleId' in node){ s=await safeGetStyle(node.textStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'TEXT',property:'text',isRemote:!!s.remote}); if (styleMatchesStrict(s.name,q)) matched=true; } }
+  if ('effectStyleId' in node){ s=await safeGetStyle(node.effectStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'EFFECT',property:'effect',isRemote:!!s.remote}); if (styleMatchesStrict(s.name,q)) matched=true; } }
+  if ('gridStyleId' in node){ s=await safeGetStyle(node.gridStyleId); if (s){ items.push({type:'STYLE',name:s.name,styleType:'GRID',property:'grid',isRemote:!!s.remote}); if (styleMatchesStrict(s.name,q)) matched=true; } }
   return { foundStyles:items, matchesSearch:matched };
 }
 async function nodeHasVariableOrStyle(node, q){
   var found=false, items=[];
+  var qBase = baseSeg(q), qKey = toKey(q);
+
   try{
+    // Styles
     var styleRes=await checkNodeStyles(node,q);
     items=items.concat(styleRes.foundStyles);
     if (styleRes.matchesSearch) found=true;
@@ -177,8 +186,8 @@ async function nodeHasVariableOrStyle(node, q){
           var full=v.name, remote=false, coll=await safeGetVariableCollection(v.variableCollectionId);
           if (coll){ full=coll.name+'/'+v.name; remote=!!coll.remote; }
           items.push({type:'VARIABLE',name:full,resolvedType:v.resolvedType,isRemote:remote});
-          var fullLower=full.toLowerCase(), base=fullLower.split('/').pop(), ql=q.toLowerCase();
-          if (fullLower.indexOf(ql)!==-1 || base.indexOf(ql)!==-1 || ql.indexOf(base)!==-1) found=true;
+          var vKey = toKey(v.name), fullKey = toKey(full);
+          if (fullKey===qKey || vKey===qKey || vKey===qBase) found=true;
         }
       }
     }
@@ -192,8 +201,8 @@ async function nodeHasVariableOrStyle(node, q){
           var full2=v2.name, remote2=false, c2=await safeGetVariableCollection(v2.variableCollectionId);
           if (c2){ full2=c2.name+'/'+v2.name; remote2=!!c2.remote; }
           items.push({type:'VARIABLE',name:full2,resolvedType:v2.resolvedType,isRemote:remote2});
-          var fullLower2=full2.toLowerCase(), base2=fullLower2.split('/').pop(), ql2=q.toLowerCase();
-          if (fullLower2.indexOf(ql2)!==-1 || base2.indexOf(ql2)!==-1 || ql2.indexOf(base2)!==-1) found=true;
+          var v2Key = toKey(v2.name), full2Key = toKey(full2);
+          if (full2Key===qKey || v2Key===qKey || v2Key===qBase) found=true;
         }
       }
     }
@@ -207,14 +216,15 @@ async function nodeHasVariableOrStyle(node, q){
           var full3=vv.name, remote3=false, c3=await safeGetVariableCollection(vv.variableCollectionId);
           if (c3){ full3=c3.name+'/'+vv.name; remote3=!!c3.remote; }
           items.push({type:'VARIABLE',name:full3,resolvedType:vv.resolvedType,isRemote:remote3,boundTo:prop});
-          var fullLower3=full3.toLowerCase(), base3=fullLower3.split('/').pop(), ql3=q.toLowerCase();
-          if (fullLower3.indexOf(ql3)!==-1 || base3.indexOf(ql3)!==-1 || ql3.indexOf(base3)!==-1) found=true;
+          var vvKey = toKey(vv.name), full3Key = toKey(full3);
+          if (full3Key===qKey || vvKey===qKey || vvKey===qBase) found=true;
         }
       }
     }
   }catch(e){}
   return { found:found, items:items };
 }
+
 async function performSmartSearch(q){
   var allFound=[], uniqVars=[], uniqStyles=[];
   // 1) selection scope

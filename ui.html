@@ -129,9 +129,9 @@
 
       <!-- Variables & Styles -->
       <div id="variables-mode">
-        <label id="search-label" class="label">Enter variable or style name</label>
-        <div id="search-hint" class="hint">eg: "colors/warning/100", "button-primary", "heading-large", etc</div>
-        <input id="search-input" class="input" type="text" placeholder="eg. colors/warning/100"/>
+        <label id="search-label" class="label">Enter variable or style name (exact match)</label>
+        <div id="search-hint" class="hint">Type the full name (e.g. <code>colors/warning/100</code>) or the base name exactly (e.g. <code>warning/100</code>).</div>
+        <input id="search-input" class="input" type="text" placeholder="e.g. colors/warning/100"/>
       </div>
 
       <button id="search-button" class="btn"><span id="search-text">Find</span></button>
@@ -238,7 +238,7 @@
           : `<div class="tips">
                <div class="tips-title">💡 Tips:</div>
                <ul class="tips-list">
-                 <li>Try exact or partial token names</li>
+                 <li>Exact match only (full name or base segment)</li>
                  <li>Searches selection first, then page</li>
                  <li>Matches Variables &amp; Styles</li>
                </ul>
@@ -346,7 +346,6 @@
           setStatus(`Can’t select that exact layer${why}${b}. Figma prevents selecting it without changing layer state.`, "error");
 
         } else if (msg.type === "select-node:fail"){
-          // Show *why* it failed rather than a generic error
           const reason = msg.reason ? ` (${msg.reason}${msg.detail ? ": " + msg.detail : ""})` : "";
           setStatus(`Couldn’t select that layer${reason}.`, "error");
 
